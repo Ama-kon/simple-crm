@@ -28,7 +28,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class DialogAddUserComponent {
   user = new User();
-  birthDate: any;
+  birthDate: Date;
 
   constructor() {}
 
