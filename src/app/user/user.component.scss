@@ -3,3 +3,15 @@
     right: 64px;
     bottom: 48px;
 }
+
+table {
+    width: 100%;
+    th {
+        font-weight: 500;
+        font-size: 14px;
+        color: rgba(0, 0, 0, 0.5);
+    }
+    tr {
+        text-align: left;
+    }
+}
