@@ -6,6 +6,7 @@
 
 table {
     width: 100%;
+    border-collapse: collapse;
     th {
         font-weight: 500;
         font-size: 14px;
@@ -13,5 +14,14 @@ table {
     }
     tr {
         text-align: left;
+        height: 60px;
+        cursor: pointer;
+        &:last-child > td {
+            border-bottom: 0;
+        }
     }
+}
+
+.border-btm {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.14);
 }
