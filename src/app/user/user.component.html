@@ -1,20 +1,42 @@
 <mat-card>
   <mat-card-content>
     <table>
-      <tr>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>E-Mail</th>
-        <th>City</th>
-        <th>Birth Date</th>
-      </tr>
-      <tr>
-        <td>Amalia</td>
-        <td>Konsta</td>
-        <td>ama'6'gmx.de</td>
-        <td>luhafen</td>
-        <td>30.05.05</td>
-      </tr>
+      <thead>
+        <tr>
+          <th class="border-btm">First Name</th>
+          <th class="border-btm">Last Name</th>
+          <th class="border-btm">E-Mail</th>
+          <th class="border-btm">City</th>
+          <th class="border-btm">Birth Date</th>
+          <th class="border-btm"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="border-btm">Amalia</td>
+          <td class="border-btm">Konsta</td>
+          <td class="border-btm">ama&#64;gmx.de</td>
+          <td class="border-btm">luhafen</td>
+          <td class="border-btm">30.05.05</td>
+          <td class="border-btm">
+            <button mat-icon-button aria-label="edit">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </td>
+        </tr>
+        <tr>
+          <td class="border-btm">Lisa</td>
+          <td class="border-btm">Elster</td>
+          <td class="border-btm">lisa&#64;gmail.com</td>
+          <td class="border-btm">Essen</td>
+          <td class="border-btm">02.08.97</td>
+          <td class="border-btm">
+            <button mat-icon-button aria-label="edit">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </td>
+        </tr>
+      </tbody>
     </table>
   </mat-card-content>
 </mat-card>
