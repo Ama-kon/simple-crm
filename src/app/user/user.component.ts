@@ -8,6 +8,7 @@ import { User } from '../../models/user.class';
 import { MatCardModule } from '@angular/material/card';
 import { Firestore, collection, collectionData } from '@angular/fire/firestore';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-user',
   standalone: true,
@@ -18,22 +19,25 @@ import { CommonModule } from '@angular/common';
     MatCardModule,
     MatIconModule,
     CommonModule,
+    RouterLink,
   ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss',
 })
 export class UserComponent {
   user = new User();
-  allUsers: User[] = [];
+  allUsers$: User[] = [];
   private firestore: Firestore = inject(Firestore);
 
   constructor(public dialog: MatDialog) {}
 
   ngOnInit(): void {
     const userCollection = collection(this.firestore, 'users');
-    collectionData(userCollection).subscribe((changes: any) => {
-      this.allUsers = changes;
-    });
+    collectionData(userCollection, { idField: 'id' }).subscribe(
+      (changes: any) => {
+        this.allUsers$ = changes;
+      }
+    );
   }
 
   openDialog(): void {
