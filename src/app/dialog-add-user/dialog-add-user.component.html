@@ -92,7 +92,14 @@
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button class="mb-16" mat-raised-button [disabled]="loading">Cancel</button>
+  <button
+    class="mb-16"
+    mat-raised-button
+    [disabled]="loading"
+    (click)="closeDialog()"
+  >
+    Cancel
+  </button>
   <button
     class="mb-16"
     mat-raised-button

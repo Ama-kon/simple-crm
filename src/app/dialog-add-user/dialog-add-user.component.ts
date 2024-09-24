@@ -48,6 +48,10 @@ export class DialogAddUserComponent {
     this.dialog.close();
   }
 
+  closeDialog() {
+    this.dialog.close();
+  }
+
   clearForm() {
     const inputs = document.querySelectorAll('input');
     inputs.forEach((input) => {
