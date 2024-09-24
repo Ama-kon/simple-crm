@@ -1,0 +1,21 @@
+<mat-card class="user-details-card">
+  <mat-card-content>
+    <div>
+      <h2 class="name">
+        {{ currentUser?.[0]?.firstName }} {{ currentUser?.[0]?.lastName }}
+      </h2>
+      <span class="email"> {{ currentUser?.[0]?.email }}</span>
+      <span class="birthday"> {{ currentUser?.[0]?.birthDate }}</span>
+    </div>
+  </mat-card-content>
+</mat-card>
+<mat-card class="user-address-card">
+  <mat-card-header>
+    <mat-card-title> Address </mat-card-title>
+  </mat-card-header>
+  <mat-card-content class="mt-24">
+    {{ currentUser?.[0]?.street }} {{ currentUser?.[0]?.houseNumber }}
+    <br />
+    {{ currentUser?.[0]?.zipCode }} {{ currentUser?.[0]?.city }}
+  </mat-card-content>
+</mat-card>
