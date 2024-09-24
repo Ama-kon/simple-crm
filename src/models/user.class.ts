@@ -3,6 +3,7 @@ export class User {
   lastName: string;
   email: string;
   birthDate: number; // date objekt kann nicht gespeichert werden, daher als string mit "timestamp"
+  id: string;
   street: string;
   houseNumber: number;
   zipCode: number;
@@ -13,6 +14,7 @@ export class User {
     this.lastName = obj ? obj.lastName : '';
     this.email = obj ? obj.email : '';
     this.birthDate = obj ? obj.birthDate : '';
+    this.id = obj ? obj.id : '';
     this.street = obj ? obj.street : '';
     this.houseNumber = obj ? obj.houseNumber : '';
     this.zipCode = obj ? obj.zipCode : '';
