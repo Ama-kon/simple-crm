@@ -12,7 +12,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let user of allUsers">
+        <tr *ngFor="let user of allUsers$" [routerLink]="['/user/' + user.id]">
           <td class="border-btm width-15">{{ user.firstName }}</td>
           <td class="border-btm width-15">{{ user.lastName }}</td>
           <td class="border-btm">{{ user.birthDate }}</td>
