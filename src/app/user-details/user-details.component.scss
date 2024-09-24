@@ -2,17 +2,18 @@
     background: #ff9300;
     height: 250px;
     border-radius: 10px;
+
     mat-card-content {
         height: 100%;
         > div {
             height: 100%;
             display: flex;
             flex-direction: column;
-            align-items: flex-end;
+            align-items: flex-start;
             color: #ffff;
             line-height: 40px;
             font-family: system-ui;
-            padding-left: 42px;
+            margin-top: 42px;
             .name {
                 font-size: 32px;
                 font-weight: 500;
@@ -30,11 +31,17 @@
     margin-top: -32px;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    height: 250px;
+    min-height: 170px;
     border: 1px solid #ff9300;
     mat-card-content {
         line-height: 32px;
         font-size: 24px;
         font-weight: 300;
     }
+}
+
+.options-button {
+    position: absolute;
+    right: 12px;
+    top: 12px;
 }
