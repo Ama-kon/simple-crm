@@ -4,24 +4,41 @@
     bottom: 48px;
 }
 
+.width-15 {
+    width: 15%;
+}
+
+.width-25 {
+    width: 25%;
+}
+
+.border-btm {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.14);
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
     th {
         font-weight: 500;
         font-size: 14px;
-        color: rgba(0, 0, 0, 0.5);
-    }
-    tr {
         text-align: left;
         height: 60px;
+        color: rgba(0, 0, 0, 0.5);
+        cursor: unset;
+    }
+    tbody {
+        text-align: left;
+        min-height: 60px;
         cursor: pointer;
-        &:last-child > td {
-            border-bottom: 0;
+
+        tr {
+            &:hover {
+                background-color: rgba(135, 134, 134, 0.1);
+            }
+            &:last-child > td {
+                border-bottom: 0 !important;
+            }
         }
     }
-}
-
-.border-btm {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.14);
 }
