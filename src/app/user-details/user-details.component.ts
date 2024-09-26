@@ -53,24 +53,29 @@ export class UserDetailsComponent {
     from(getDoc(currentUserRef)).subscribe((document) => {
       if (document.exists()) {
         this.currentUser = [document.data() as User];
-        console.log('User data:', this.currentUser);
-      } else {
-        console.log('No such document!');
       }
     });
   }
 
   editAddressCard() {
     const userCopy = { ...this.currentUser[0] };
-    this.dialog.open(DialogEditAddressComponent, {
+    const dialogRef = this.dialog.open(DialogEditAddressComponent, {
       data: { user: userCopy, userId: this.currentUserId },
+    });
+    const dialogComponent = dialogRef.componentInstance;
+    dialogComponent.userUpdated.subscribe(() => {
+      this.getCurrentUser();
     });
   }
 
   editNameCard() {
     const userCopy = { ...this.currentUser[0] };
-    this.dialog.open(DialogEditNameComponent, {
+    const dialogRef = this.dialog.open(DialogEditNameComponent, {
       data: { user: userCopy, userId: this.currentUserId },
+    });
+    const dialogComponent = dialogRef.componentInstance;
+    dialogComponent.userUpdated.subscribe(() => {
+      this.getCurrentUser();
     });
   }
 }

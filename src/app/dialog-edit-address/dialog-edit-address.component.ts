@@ -1,4 +1,4 @@
-import { Component, Inject, inject } from '@angular/core';
+import { Component, Inject, inject, Output, EventEmitter } from '@angular/core';
 import {
   MatDialogRef,
   MatDialogModule,
@@ -35,6 +35,7 @@ export class DialogEditAddressComponent {
   user: User;
   loading = false;
   private firestore: Firestore = inject(Firestore);
+  @Output() userUpdated = new EventEmitter<void>();
   constructor(
     public dialog: MatDialogRef<DialogEditAddressComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { user: User; userId: string }
@@ -47,7 +48,9 @@ export class DialogEditAddressComponent {
     const userDocRef = doc(this.firestore, 'users', this.data.userId);
     updateDoc(userDocRef, { ...this.user }).then(() => {
       this.loading = false;
-      this.dialog.close('saved');
+      this.userUpdated.emit();
+      this.closeDialog();
+      this.loading = false;
     });
   }
 

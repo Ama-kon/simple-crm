@@ -38,7 +38,7 @@ export class DialogEditNameComponent {
   user: User;
   loading = false;
   private firestore: Firestore = inject(Firestore);
-  @Output() userUpdated = new EventEmitter<User>();
+  @Output() userUpdated = new EventEmitter<void>();
   constructor(
     public dialog: MatDialogRef<DialogEditNameComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { user: User; userId: string }
@@ -51,9 +51,12 @@ export class DialogEditNameComponent {
   saveEdit() {
     this.loading = true;
     const userDocRef = doc(this.firestore, 'users', this.data.userId);
-    updateDoc(userDocRef, { ...this.user });
-    this.closeDialog();
-    this.loading = false;
+    updateDoc(userDocRef, { ...this.user }).then(() => {
+      this.loading = false;
+      this.userUpdated.emit();
+      this.closeDialog();
+      this.loading = false;
+    });
   }
 
   closeDialog() {
