@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Firestore, collection, doc, getDoc } from '@angular/fire/firestore';
 import { MatCardModule } from '@angular/material/card';
 import { ActivatedRoute, RouterLink } from '@angular/router';
@@ -11,7 +11,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { DialogEditAddressComponent } from '../dialog-edit-address/dialog-edit-address.component';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogEditNameComponent } from '../dialog-edit-name/dialog-edit-name.component';
-
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-user-details',
   standalone: true,
@@ -28,9 +28,11 @@ import { DialogEditNameComponent } from '../dialog-edit-name/dialog-edit-name.co
   templateUrl: './user-details.component.html',
   styleUrl: './user-details.component.scss',
 })
-export class UserDetailsComponent {
+export class UserDetailsComponent implements OnInit, OnDestroy {
   currentUserId: string;
   currentUser: User[] = [];
+  private paramsSubscription: Subscription;
+  private userSubscription: Subscription;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -40,21 +42,25 @@ export class UserDetailsComponent {
   private firestore = inject(Firestore);
 
   ngOnInit() {
-    this.activatedRoute.params.subscribe((paramsId) => {
-      this.currentUserId = paramsId['id'];
-      this.getCurrentUser();
-    });
+    this.paramsSubscription = this.activatedRoute.params.subscribe(
+      (paramsId) => {
+        this.currentUserId = paramsId['id'];
+        this.getCurrentUser();
+      }
+    );
   }
 
   getCurrentUser() {
     const userCollection = collection(this.firestore, 'users');
     const currentUserRef = doc(userCollection, this.currentUserId);
 
-    from(getDoc(currentUserRef)).subscribe((document) => {
-      if (document.exists()) {
-        this.currentUser = [document.data() as User];
+    this.userSubscription = from(getDoc(currentUserRef)).subscribe(
+      (document) => {
+        if (document.exists()) {
+          this.currentUser = [document.data() as User];
+        }
       }
-    });
+    );
   }
 
   editAddressCard() {
@@ -77,5 +83,14 @@ export class UserDetailsComponent {
     dialogComponent.userUpdated.subscribe(() => {
       this.getCurrentUser();
     });
+  }
+
+  ngOnDestroy() {
+    if (this.paramsSubscription) {
+      this.paramsSubscription.unsubscribe();
+    }
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
   }
 }

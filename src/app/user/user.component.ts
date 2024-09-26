@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -9,6 +9,7 @@ import { MatCardModule } from '@angular/material/card';
 import { Firestore, collection, collectionData } from '@angular/fire/firestore';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-user',
   standalone: true,
@@ -24,25 +25,32 @@ import { RouterLink } from '@angular/router';
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss',
 })
-export class UserComponent {
+export class UserComponent implements OnInit, OnDestroy {
   user = new User();
   allUsers$: User[] = [];
+  private userSubscription: Subscription;
   private firestore: Firestore = inject(Firestore);
 
   constructor(public dialog: MatDialog) {}
 
   ngOnInit(): void {
     const userCollection = collection(this.firestore, 'users');
-    collectionData(userCollection, { idField: 'id' }).subscribe(
-      (changes: any) => {
-        this.allUsers$ = changes;
-      }
-    );
+    this.userSubscription = collectionData(userCollection, {
+      idField: 'id',
+    }).subscribe((changes: any) => {
+      this.allUsers$ = changes;
+    });
   }
 
   openDialog(): void {
     this.dialog.open(DialogAddUserComponent, {
       data: {},
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
   }
 }
