@@ -2,12 +2,15 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { Firestore, collection, doc, getDoc } from '@angular/fire/firestore';
 import { MatCardModule } from '@angular/material/card';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { User } from '../../models/user.class';
 import { from } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
+import { DialogEditAddressComponent } from '../dialog-edit-address/dialog-edit-address.component';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogEditNameComponent } from '../dialog-edit-name/dialog-edit-name.component';
 
 @Component({
   selector: 'app-user-details',
@@ -18,6 +21,9 @@ import { MatMenuModule } from '@angular/material/menu';
     MatIconModule,
     MatButtonModule,
     MatMenuModule,
+    RouterLink,
+    DialogEditAddressComponent,
+    DialogEditNameComponent,
   ],
   templateUrl: './user-details.component.html',
   styleUrl: './user-details.component.scss',
@@ -26,14 +32,16 @@ export class UserDetailsComponent {
   currentUserId: string;
   currentUser: User[] = [];
 
-  constructor(private activatedRoute: ActivatedRoute) {}
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private dialog: MatDialog
+  ) {}
 
   private firestore = inject(Firestore);
 
   ngOnInit() {
     this.activatedRoute.params.subscribe((paramsId) => {
       this.currentUserId = paramsId['id'];
-      console.log(this.currentUserId);
       this.getCurrentUser();
     });
   }
@@ -53,10 +61,16 @@ export class UserDetailsComponent {
   }
 
   editAddressCard() {
-    console.log('openAdressDialog');
+    const userCopy = { ...this.currentUser[0] };
+    this.dialog.open(DialogEditAddressComponent, {
+      data: { user: userCopy, userId: this.currentUserId },
+    });
   }
 
   editNameCard() {
-    console.log('openNameDialog');
+    const userCopy = { ...this.currentUser[0] };
+    this.dialog.open(DialogEditNameComponent, {
+      data: { user: userCopy, userId: this.currentUserId },
+    });
   }
 }
