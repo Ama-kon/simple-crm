@@ -1,0 +1,63 @@
+<mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+<mat-dialog-content>
+  <h2>Edit</h2>
+  <div>
+    <mat-form-field class="mr-16" appearance="outline">
+      <mat-label>Street</mat-label>
+      <input
+        [disabled]="loading"
+        [(ngModel)]="user.street"
+        matInput
+        placeholder="Street"
+      />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>House number</mat-label>
+      <input
+        [disabled]="loading"
+        [(ngModel)]="user.houseNumber"
+        matInput
+        placeholder="House number"
+      />
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field class="mr-16" appearance="outline">
+      <mat-label>Zip Code</mat-label>
+      <input
+        [disabled]="loading"
+        [(ngModel)]="user.zipCode"
+        matInput
+        placeholder="Zip code"
+      />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>City</mat-label>
+      <input
+        [disabled]="loading"
+        [(ngModel)]="user.city"
+        matInput
+        placeholder="City"
+      />
+    </mat-form-field>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button
+    class="mb-16"
+    mat-raised-button
+    [disabled]="loading"
+    (click)="closeDialog()"
+  >
+    Cancel
+  </button>
+  <button
+    class="mb-16"
+    mat-raised-button
+    [disabled]="loading"
+    color="primary"
+    (click)="saveEdit()"
+  >
+    Save
+  </button>
+</mat-dialog-actions>
