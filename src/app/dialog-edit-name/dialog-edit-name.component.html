@@ -1,0 +1,54 @@
+<mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+<mat-dialog-content>
+  <h2>Edit</h2>
+  <div>
+    <mat-form-field class="mr-16" appearance="outline">
+      <mat-label>Enter your first name</mat-label>
+      <input
+        [disabled]="loading"
+        [(ngModel)]="user.firstName"
+        matInput
+        placeholder="First name"
+      />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Enter your last name</mat-label>
+      <input
+        [disabled]="loading"
+        [(ngModel)]="user.lastName"
+        matInput
+        placeholder="Last name"
+      />
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Enter your E-Mail</mat-label>
+      <input
+        [disabled]="loading"
+        [(ngModel)]="user.email"
+        matInput
+        placeholder="E-Mail"
+      />
+    </mat-form-field>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button
+    class="mb-16"
+    mat-raised-button
+    [disabled]="loading"
+    (click)="closeDialog()"
+  >
+    Cancel
+  </button>
+  <button
+    class="mb-16"
+    mat-raised-button
+    [disabled]="loading"
+    color="primary"
+    (click)="saveEdit()"
+  >
+    Save
+  </button>
+</mat-dialog-actions>
