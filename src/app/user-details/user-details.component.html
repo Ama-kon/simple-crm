@@ -16,7 +16,9 @@
         {{ currentUser?.[0]?.firstName }} {{ currentUser?.[0]?.lastName }}
       </h2>
       <span class="email"> {{ currentUser?.[0]?.email }}</span>
-      <span class="birthday"> {{ currentUser?.[0]?.birthDate }}</span>
+      <span class="birthday">
+        {{ formatDate(currentUser?.[0]?.birthDate) }}</span
+      >
     </div>
   </mat-card-content>
 </mat-card>
