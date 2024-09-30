@@ -3,11 +3,46 @@
     <table class="responsive-table">
       <thead>
         <tr>
-          <th class="border-btm width-15">First Name</th>
-          <th class="border-btm width-15">Last Name</th>
-          <th class="border-btm">Birth Date</th>
-          <th class="border-btm width-25">E-Mail</th>
-          <th class="border-btm">City</th>
+          <th class="border-btm width-15">
+            <div class="header-content">
+              First Name
+              <button mat-icon-button (click)="sortUsers('firstName')">
+                <mat-icon>swap_vert</mat-icon>
+              </button>
+            </div>
+          </th>
+          <th class="border-btm width-15">
+            <div class="header-content">
+              Last Name
+              <button mat-icon-button (click)="sortUsers('lastName')">
+                <mat-icon>swap_vert</mat-icon>
+              </button>
+            </div>
+          </th>
+          <th class="border-btm">
+            <div class="header-content">
+              Birth Date
+              <button mat-icon-button (click)="sortUsers('birthDate')">
+                <mat-icon>swap_vert</mat-icon>
+              </button>
+            </div>
+          </th>
+          <th class="border-btm width-25">
+            <div class="header-content">
+              E-Mail
+              <button mat-icon-button (click)="sortUsers('email')">
+                <mat-icon>swap_vert</mat-icon>
+              </button>
+            </div>
+          </th>
+          <th class="border-btm">
+            <div class="header-content">
+              City
+              <button mat-icon-button (click)="sortUsers('city')">
+                <mat-icon>swap_vert</mat-icon>
+              </button>
+            </div>
+          </th>
           <th class="border-btm"></th>
         </tr>
       </thead>
@@ -15,7 +50,7 @@
         <tr *ngFor="let user of allUsers$" [routerLink]="['/user/' + user.id]">
           <td class="border-btm width-15">{{ user.firstName }}</td>
           <td class="border-btm width-15">{{ user.lastName }}</td>
-          <td class="border-btm">{{ user.birthDate }}</td>
+          <td class="border-btm">{{ formatDate(user.birthDate) }}</td>
           <td class="border-btm">{{ user.email }}</td>
           <td class="border-btm">{{ user.city }}</td>
           <td class="border-btm">
@@ -35,6 +70,7 @@
   matTooltip="Add a new user"
   [matTooltipPosition]="'above'"
   (click)="openDialog()"
+  color="primary"
 >
   <mat-icon>add</mat-icon>
 </button>
