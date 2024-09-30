@@ -1,3 +1,7 @@
+<button mat-icon-button aria-label="arrow back button" [routerLink]="['/user']">
+  <mat-icon>arrow_back</mat-icon>
+</button>
+
 <mat-card class="user-details-card">
   <button
     mat-icon-button
@@ -43,3 +47,14 @@
     {{ currentUser?.[0]?.zipCode }} {{ currentUser?.[0]?.city }}
   </mat-card-content>
 </mat-card>
+
+<button
+  mat-fab
+  color="primary"
+  aria-label="delete icon"
+  matTooltip="Delete this User"
+  [matTooltipPosition]="'above'"
+  class="delete-button"
+>
+  <mat-icon>delete</mat-icon>
+</button>
