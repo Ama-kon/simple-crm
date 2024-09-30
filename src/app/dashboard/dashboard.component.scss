@@ -1,0 +1,17 @@
+.follow-ups-chart,
+.customers-by-age-chart {
+    // height: 250px;
+    // width: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.follow-age-charts {
+    display: flex;
+    height: fit-content;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: 0 auto;
+    width: 90%;
+}
