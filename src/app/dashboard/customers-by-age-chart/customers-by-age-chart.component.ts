@@ -24,19 +24,15 @@ export class CustomersByAgeChartComponent implements OnInit {
         {
           data: [42, 68, 18, 0],
           backgroundColor: [
-            documentStyle.getPropertyValue('--green-500'),
+            documentStyle.getPropertyValue('--pink-500'),
             documentStyle.getPropertyValue('--yellow-500'),
             documentStyle.getPropertyValue('--blue-500'),
-            // documentStyle.getPropertyValue('--red-500'),
-            // documentStyle.getPropertyValue('--orange-500'),
             documentStyle.getPropertyValue('--grey-500'),
           ],
           hoverBackgroundColor: [
-            documentStyle.getPropertyValue('--green-400'),
+            documentStyle.getPropertyValue('--pink-400'),
             documentStyle.getPropertyValue('--yellow-400'),
             documentStyle.getPropertyValue('--blue-400'),
-            // documentStyle.getPropertyValue('--red-400'),
-            // documentStyle.getPropertyValue('--orange-400'),
             documentStyle.getPropertyValue('--grey-400'),
           ],
         },
