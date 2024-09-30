@@ -11,6 +11,10 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { FormatDateService } from '../services/formatDate.service';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
+import { UserSearchStateService } from '../services/userSearchState.service';
 @Component({
   selector: 'app-user',
   standalone: true,
@@ -22,6 +26,9 @@ import { FormatDateService } from '../services/formatDate.service';
     MatIconModule,
     CommonModule,
     RouterLink,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
   ],
   providers: [FormatDateService],
   templateUrl: './user.component.html',
@@ -30,13 +37,16 @@ import { FormatDateService } from '../services/formatDate.service';
 export class UserComponent implements OnInit, OnDestroy {
   user = new User();
   allUsers$: User[] = [];
+  filteredUsers: User[] = [];
+  searchTerm: string = '';
   aToZ: boolean = true;
   private userSubscription: Subscription;
   private firestore: Firestore = inject(Firestore);
 
   constructor(
     public dialog: MatDialog,
-    private formatDateService: FormatDateService
+    private formatDateService: FormatDateService,
+    private UserSearchStateService: UserSearchStateService
   ) {}
 
   ngOnInit(): void {
@@ -45,7 +55,15 @@ export class UserComponent implements OnInit, OnDestroy {
       idField: 'id',
     }).subscribe((changes: any) => {
       this.allUsers$ = changes;
+      if (!this.UserSearchStateService.searchTerm) {
+        this.UserSearchStateService.clearSearchState();
+        this.filteredUsers = this.allUsers$;
+      } else {
+        this.searchTerm = this.UserSearchStateService.searchTerm;
+        this.filterUsers();
+      }
     });
+    console.log(this.searchTerm);
   }
 
   openDialog(): void {
@@ -107,6 +125,38 @@ export class UserComponent implements OnInit, OnDestroy {
         default:
           return 0;
       }
+    });
+  }
+
+  filterUsers(): void {
+    if (!this.searchTerm) {
+      this.showAllUsers();
+    }
+    this.filterAllUsers();
+    this.UserSearchStateService.searchTerm = this.searchTerm;
+    this.UserSearchStateService.filteredUsers = this.filteredUsers;
+  }
+
+  showAllUsers(): void {
+    this.filteredUsers = this.allUsers$;
+    this.UserSearchStateService.filteredUsers = [];
+  }
+
+  filterAllUsers(): void {
+    this.filteredUsers = this.allUsers$.filter((user) => {
+      const searchTermLower = this.searchTerm.toLowerCase();
+      const formattedBirthDate = this.formatDateService.formatDate(
+        user.birthDate
+      );
+      return (
+        user.firstName.toLowerCase().includes(searchTermLower) ||
+        user.lastName.toLowerCase().includes(searchTermLower) ||
+        user.email.toLowerCase().includes(searchTermLower) ||
+        user.city.toLowerCase().includes(searchTermLower) ||
+        user.street.toLowerCase().includes(searchTermLower) ||
+        user.zipCode.toString().includes(searchTermLower) ||
+        formattedBirthDate.toLowerCase().includes(searchTermLower)
+      );
     });
   }
 
