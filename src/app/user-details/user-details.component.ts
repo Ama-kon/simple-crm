@@ -12,6 +12,9 @@ import { DialogEditAddressComponent } from '../dialog-edit-address/dialog-edit-a
 import { MatDialog } from '@angular/material/dialog';
 import { DialogEditNameComponent } from '../dialog-edit-name/dialog-edit-name.component';
 import { Subscription } from 'rxjs';
+import { FormatDateService } from '../services/formatDate.service';
+import { MatTooltip } from '@angular/material/tooltip';
+
 @Component({
   selector: 'app-user-details',
   standalone: true,
@@ -24,7 +27,9 @@ import { Subscription } from 'rxjs';
     RouterLink,
     DialogEditAddressComponent,
     DialogEditNameComponent,
+    MatTooltip,
   ],
+  providers: [FormatDateService],
   templateUrl: './user-details.component.html',
   styleUrl: './user-details.component.scss',
 })
@@ -36,7 +41,8 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private formatDateService: FormatDateService
   ) {}
 
   private firestore = inject(Firestore);
@@ -74,14 +80,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  formatDate(birthDate: any): string {
-    const date = new Date(birthDate);
-    const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const year = date.getFullYear();
-    return `${day}.${month}.${year}`;
-  }
-
   editNameCard() {
     const userCopy = { ...this.currentUser[0] };
     const dialogRef = this.dialog.open(DialogEditNameComponent, {
@@ -91,6 +89,10 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     dialogComponent.userUpdated.subscribe(() => {
       this.getCurrentUser();
     });
+  }
+
+  formatDate(birthDate: any): string {
+    return this.formatDateService.formatDate(birthDate);
   }
 
   ngOnDestroy() {
