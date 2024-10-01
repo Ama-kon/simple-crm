@@ -4,6 +4,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
+import { StandardDataComponent } from './user-management/standard-data/standard-data.component';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +16,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatButtonModule,
     MatSidenavModule,
     MatIconModule,
+    StandardDataComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
