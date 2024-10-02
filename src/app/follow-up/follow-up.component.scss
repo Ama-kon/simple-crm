@@ -10,4 +10,45 @@
     background: #fff;
     box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.08);
     cursor: pointer;
+    margin: 24px 0;
+}
+
+.title-follow-up,
+.title-lead-nurturing,
+.title-after-sales {
+    color: white;
+    background-color: #3f51b5;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+.title-follow-up {
+    background-color: #3f51b5;
+}
+
+.title-lead-nurturing {
+    background-color: #0296b5;
+}
+
+.title-after-sales {
+    background-color: #977c92;
+}
+
+.task-card-title {
+    display: flex;
+    justify-content: space-between;
+}
+
+.task-customer {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.task-card-content {
+    font-size: 16px;
+    color: #808080;
+}
+
+.task-card-created {
+    color: rgb(176 174 174);
 }
