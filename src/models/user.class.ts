@@ -2,12 +2,13 @@ export class User {
   firstName: string;
   lastName: string;
   email: string;
-  birthDate: number; // date objekt kann nicht gespeichert werden, daher als string mit "timestamp"
+  birthDate: number;
   id: string;
   street: string;
   houseNumber: number;
   zipCode: number;
   city: string;
+  followUps: FollowUp[];
 
   constructor(obj?: any) {
     this.firstName = obj ? obj.firstName : '';
@@ -19,5 +20,16 @@ export class User {
     this.houseNumber = obj ? obj.houseNumber : '';
     this.zipCode = obj ? obj.zipCode : '';
     this.city = obj ? obj.city : '';
+    this.followUps =
+      obj && obj.followUps
+        ? obj.followUps.map((fu: any) => ({
+            id: fu.id || '',
+            category: fu.category || '',
+            createdAt: fu.createdAt || 0,
+            deadline: fu.deadline || 0,
+            description: fu.description || '',
+            title: fu.title || '',
+          }))
+        : [];
   }
 }
