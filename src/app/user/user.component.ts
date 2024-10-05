@@ -50,7 +50,7 @@ export class UserComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    const userCollection = collection(this.firestore, 'users');
+    const userCollection = collection(this.firestore, 'standardData');
     this.userSubscription = collectionData(userCollection, {
       idField: 'id',
     }).subscribe((changes: any) => {

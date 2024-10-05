@@ -57,7 +57,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   }
 
   getCurrentUser() {
-    const userCollection = collection(this.firestore, 'users');
+    const userCollection = collection(this.firestore, 'standardData');
     const currentUserRef = doc(userCollection, this.currentUserId);
 
     this.userSubscription = from(getDoc(currentUserRef)).subscribe(
