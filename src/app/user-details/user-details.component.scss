@@ -31,12 +31,31 @@
     margin-top: -32px;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
     min-height: 170px;
     border: 1px solid #ff9300;
     mat-card-content {
         line-height: 32px;
         font-size: 24px;
         font-weight: 300;
+    }
+}
+
+.user-followUp-card {
+    margin-top: 8px;
+    // background-color: #3f51b5;
+    // color: #ffff;
+    border: 1px solid #ff9300;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    .follow-up-card {
+        color: black;
+        margin-right: 42px;
+        margin-bottom: 32px;
+        cursor: pointer;
     }
 }
 
