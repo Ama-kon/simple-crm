@@ -21,6 +21,7 @@ import { Subscription } from 'rxjs';
 import { FormatDateService } from '../services/formatDate.service';
 import { MatTooltip } from '@angular/material/tooltip';
 import { FollowUp } from '../../interfaces/followUp.interface';
+import { DialogEditFollowUpComponent } from '../dialog-edit-follow-up/dialog-edit-follow-up.component';
 
 @Component({
   selector: 'app-user-details',
@@ -34,6 +35,7 @@ import { FollowUp } from '../../interfaces/followUp.interface';
     RouterLink,
     DialogEditAddressComponent,
     DialogEditNameComponent,
+    DialogEditFollowUpComponent,
     MatTooltip,
   ],
   providers: [FormatDateService],
@@ -44,6 +46,8 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   currentUserId: string;
   currentUser: User[] = [];
   followUps: FollowUp[] = [];
+  followUpId: string;
+  index: number;
   private paramsSubscription: Subscription;
   private userSubscription: Subscription;
 
@@ -129,8 +133,26 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  formatDate(birthDate: any): string {
-    return this.formatDateService.formatDate(birthDate);
+  editFollowUpCard(index: number) {
+    this.index = index;
+    const userCopy = { ...this.currentUser[0] };
+    const dialogRef = this.dialog.open(DialogEditFollowUpComponent, {
+      data: {
+        user: userCopy,
+        userId: this.currentUserId,
+        followUps: this.followUps,
+        followUpId: this.followUpId,
+        index: this.index,
+      },
+    });
+    const dialogComponent = dialogRef.componentInstance;
+    dialogComponent.userUpdated.subscribe(() => {
+      this.getCurrentUser();
+    });
+  }
+
+  formatDate(date: any): string {
+    return this.formatDateService.formatDate(date);
   }
 
   get hasFollowUps(): boolean {
