@@ -1,3 +1,5 @@
+import { FollowUp } from '../interfaces/followUp.interface';
+
 export class User {
   firstName: string;
   lastName: string;

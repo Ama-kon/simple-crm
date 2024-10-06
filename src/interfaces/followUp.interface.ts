@@ -1,4 +1,4 @@
-interface FollowUp {
+export interface FollowUp {
   id: string;
   category: string;
   createdAt: number;
