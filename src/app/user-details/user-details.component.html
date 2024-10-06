@@ -48,6 +48,42 @@
   </mat-card-content>
 </mat-card>
 
+<!-- ******************************************************* -->
+<mat-card class="user-followUp-card pl-42">
+  <mat-card-header>
+    <mat-card-title> Follow ups </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <ng-container *ngIf="hasFollowUps; else noFollowUps">
+      <mat-card *ngFor="let followUp of followUps" class="follow-up-card mt-24">
+        <button
+          class="options-button"
+          mat-icon-button
+          aria-label="more options button"
+          [matMenuTriggerFor]="menu2"
+        >
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu2="matMenu">
+          <button mat-menu-item (click)="editAddressCard()">Edit</button>
+        </mat-menu>
+        <mat-card-header>
+          <mat-card-title>{{ followUp.title }}</mat-card-title>
+          <mat-card-subtitle>{{ followUp.category }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p>{{ followUp.description }}</p>
+          <p>Created: {{ followUp.createdAt | date }}</p>
+          <p>Deadline: {{ followUp.deadline | date }}</p>
+        </mat-card-content>
+      </mat-card>
+    </ng-container>
+    <ng-template #noFollowUps>
+      <p class="no-followups-text">No follow-ups available for this user.</p>
+    </ng-template>
+  </mat-card-content>
+</mat-card>
+
 <button
   mat-fab
   color="primary"
