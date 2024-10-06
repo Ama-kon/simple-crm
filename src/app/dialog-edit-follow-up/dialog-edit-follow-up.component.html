@@ -1,0 +1,63 @@
+<mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+
+<mat-dialog-content>
+  <h2>Edit Follow Up</h2>
+
+  <div>
+    <mat-form-field class="mr-16 full-width" appearance="outline">
+      <mat-label>Title</mat-label>
+      <input
+        [disabled]="loading"
+        [(ngModel)]="currentFollowUp.title"
+        matInput
+        placeholder="New title"
+      />
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field class="mr-16 full-width" appearance="outline">
+      <mat-label>Description</mat-label>
+      <textarea
+        [disabled]="loading"
+        [(ngModel)]="currentFollowUp.description"
+        matInput
+        placeholder="New description"
+      ></textarea>
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field class="mr-16 full-width" appearance="outline">
+      <mat-label>Deadline</mat-label>
+      <input
+        [disabled]="loading"
+        matInput
+        [matDatepicker]="picker"
+        placeholder="New deadline"
+      />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button
+    class="mb-16"
+    mat-raised-button
+    [disabled]="loading"
+    (click)="closeDialog()"
+  >
+    Cancel
+  </button>
+  <button
+    class="mb-16"
+    mat-raised-button
+    [disabled]="loading"
+    color="primary"
+    (click)="saveEdit()"
+  >
+    Save
+  </button>
+</mat-dialog-actions>
