@@ -1,6 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { Firestore, collection, doc, getDoc } from '@angular/fire/firestore';
+import {
+  Firestore,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+} from '@angular/fire/firestore';
 import { MatCardModule } from '@angular/material/card';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { User } from '../../models/user.class';
@@ -14,6 +20,7 @@ import { DialogEditNameComponent } from '../dialog-edit-name/dialog-edit-name.co
 import { Subscription } from 'rxjs';
 import { FormatDateService } from '../services/formatDate.service';
 import { MatTooltip } from '@angular/material/tooltip';
+import { FollowUp } from '../../interfaces/followUp.interface';
 
 @Component({
   selector: 'app-user-details',
@@ -36,6 +43,7 @@ import { MatTooltip } from '@angular/material/tooltip';
 export class UserDetailsComponent implements OnInit, OnDestroy {
   currentUserId: string;
   currentUser: User[] = [];
+  followUps: FollowUp[] = [];
   private paramsSubscription: Subscription;
   private userSubscription: Subscription;
 
@@ -54,6 +62,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
         this.getCurrentUser();
       }
     );
+    this.getFollowUps(this.currentUserId);
   }
 
   getCurrentUser() {
@@ -67,6 +76,35 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
         }
       }
     );
+  }
+
+  async getFollowUps(userId: string) {
+    const followUpsRef = collection(
+      this.firestore,
+      `standardData/${userId}/Follow-ups`
+    );
+    const followUpsSnapshot = await getDocs(followUpsRef);
+
+    if (followUpsSnapshot.empty) {
+      console.log('No follow-ups found for this user');
+      return null;
+    } else {
+      const followUps = followUpsSnapshot.docs.map((doc) => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          category: data['category'] || '',
+          createdAt: data['createdAt'] || 0,
+          deadline: data['deadline'] || 0,
+          description: data['description'] || '',
+          title: data['title'] || '',
+        } as FollowUp;
+      });
+
+      console.log('Follow-ups found:', followUps);
+      this.followUps = followUps;
+      return followUps;
+    }
   }
 
   editAddressCard() {
@@ -93,6 +131,16 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
 
   formatDate(birthDate: any): string {
     return this.formatDateService.formatDate(birthDate);
+  }
+
+  get hasFollowUps(): boolean {
+    if (this.followUps.length > 0) {
+      console.log('Follow-ups found:', this.followUps);
+      return true;
+    } else {
+      console.log('No follow-ups found for this user');
+      return false;
+    }
   }
 
   ngOnDestroy() {
