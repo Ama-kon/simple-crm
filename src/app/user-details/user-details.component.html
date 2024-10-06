@@ -55,7 +55,10 @@
   </mat-card-header>
   <mat-card-content>
     <ng-container *ngIf="hasFollowUps; else noFollowUps">
-      <mat-card *ngFor="let followUp of followUps" class="follow-up-card mt-24">
+      <mat-card
+        *ngFor="let followUp of followUps; let index = index"
+        class="follow-up-card mt-24 gap-24"
+      >
         <button
           class="options-button"
           mat-icon-button
@@ -65,7 +68,7 @@
           <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu2="matMenu">
-          <button mat-menu-item (click)="editAddressCard()">Edit</button>
+          <button mat-menu-item (click)="editFollowUpCard(index)">Edit</button>
         </mat-menu>
         <mat-card-header>
           <mat-card-title>{{ followUp.title }}</mat-card-title>
@@ -73,8 +76,8 @@
         </mat-card-header>
         <mat-card-content>
           <p>{{ followUp.description }}</p>
-          <p>Created: {{ followUp.createdAt | date }}</p>
-          <p>Deadline: {{ followUp.deadline | date }}</p>
+          <p>Created: {{ formatDate(followUp.createdAt) }}</p>
+          <p>Deadline: {{ formatDate(followUp.deadline) }}</p>
         </mat-card-content>
       </mat-card>
     </ng-container>
