@@ -55,7 +55,6 @@ export class DialogEditNameComponent {
       this.loading = false;
       this.userUpdated.emit();
       this.closeDialog();
-      this.loading = false;
     });
   }
 
