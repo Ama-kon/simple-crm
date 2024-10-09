@@ -12,7 +12,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { User } from '../../models/user.class';
 import { FormsModule } from '@angular/forms';
-import { Firestore, doc, updateDoc } from '@angular/fire/firestore';
+import { Firestore, doc, setDoc } from '@angular/fire/firestore';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { CommonModule } from '@angular/common';
 import { FollowUp } from '../../interfaces/followUp.interface';
@@ -56,7 +56,7 @@ export class DialogEditFollowUpComponent {
       userId: string;
       followUpId: string;
       index: number;
-      followUps: any[];
+      followUps: FollowUp[];
     }
   ) {
     console.log('data', data);
@@ -65,37 +65,33 @@ export class DialogEditFollowUpComponent {
     this.followUpId = data.followUpId;
     this.index = data.index;
     this.currentFollowUp = this.data.followUps[this.data.index];
+    console.log('currentFollowUp', this.currentFollowUp.deadline);
   }
 
   formatDate(date: any): string {
     return this.formatDateService.formatDate(date);
   }
 
-  // save funktioniert nicht, hier weiter machen - letzter Stand 400 bad request
+  saveEdit() {
+    const userDocRef = doc(this.firestore, 'standardData', this.data.userId);
+    const followUpDocRef = doc(
+      userDocRef,
+      'Follow-ups',
+      this.currentFollowUp.id
+    );
 
-  // saveEdit() {
-  //   console.log('currentFollowUp', this.currentFollowUp);
-  //   console.log('currentUser', this.user);
-  //   console.log('followUpId', this.followUpId);
-  //   this.loading = true;
-  //   const userDocRef = doc(this.firestore, 'users', this.data.userId);
-  //   const followUpDocRef = doc(
-  //     userDocRef,
-  //     'Follow-ups',
-  //     this.currentFollowUp.id
-  //   );
+    const updatedFollowUp = {
+      ...this.currentFollowUp,
+      deadline: new Date(this.currentFollowUp.deadline).getTime(),
+    };
 
-  //   updateDoc(followUpDocRef, { ...this.currentFollowUp })
-  //     .then(() => {
-  //       this.loading = false;
-  //       this.userUpdated.emit();
-  //       this.closeDialog();
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error updating follow-up:', error);
-  //       this.loading = false;
-  //     });
-  // }
+    setDoc(followUpDocRef, updatedFollowUp).then(() => {
+      this.loading = false;
+      this.userUpdated.emit();
+      this.closeDialog();
+      this.loading = false;
+    });
+  }
 
   closeDialog() {
     this.dialog.close();
