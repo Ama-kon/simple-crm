@@ -5,12 +5,12 @@
 
   <div>
     <mat-form-field class="mr-16 full-width" appearance="outline">
-      <mat-label>Title</mat-label>
+      <mat-label>Action</mat-label>
       <input
         [disabled]="loading"
-        [(ngModel)]="currentFollowUp.title"
+        [(ngModel)]="currentFollowUp.action"
         matInput
-        placeholder="New title"
+        placeholder="New action"
       />
     </mat-form-field>
   </div>
@@ -35,6 +35,8 @@
         matInput
         [matDatepicker]="picker"
         placeholder="New deadline"
+        [(ngModel)]="currentFollowUp.deadline"
+        [value]="formatDate(currentFollowUp.deadline)"
       />
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
