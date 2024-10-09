@@ -4,5 +4,5 @@ export interface FollowUp {
   createdAt: number;
   deadline: number;
   description: string;
-  title: string;
+  action: string;
 }
