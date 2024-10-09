@@ -1,0 +1,86 @@
+<mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+
+<mat-dialog-content>
+  <h2>Add new Follow Up</h2>
+
+  <div>
+    <mat-form-field class="mr-16 full-width" appearance="outline">
+      <mat-label>Action</mat-label>
+      <mat-select
+        [(ngModel)]="newFollowUp.action"
+        [(ngModel)]="newFollowUp.action"
+      >
+        @for (action of actions; track action) {
+        <mat-option [value]="action.value">{{ action.value }} </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field class="mr-16 full-width" appearance="outline">
+      <mat-label>Category</mat-label>
+      <mat-select [(ngModel)]="newFollowUp.category">
+        @for (category of categories; track category) {
+        <mat-option [value]="category.value">{{ category.value }} </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field class="mr-16 full-width" appearance="outline">
+      <mat-label>Description</mat-label>
+      <textarea
+        [disabled]="loading"
+        [(ngModel)]="newFollowUp.description"
+        matInput
+        placeholder="New description"
+      ></textarea>
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field class="mr-16 full-width" appearance="outline">
+      <mat-label>Deadline</mat-label>
+      <input
+        [disabled]="loading"
+        matInput
+        [(ngModel)]="newFollowUp.deadline"
+        [matDatepicker]="picker"
+        placeholder="New deadline"
+      />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field class="mr-16 full-width" appearance="outline">
+      <mat-label>Created At</mat-label>
+      <input
+        [disabled]="true"
+        matInput
+        [value]="formatDate(newFollowUp.createdAt)"
+        placeholder="dd/mm/yyyy"
+      />
+    </mat-form-field>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button
+    class="mb-16"
+    mat-raised-button
+    [disabled]="loading"
+    (click)="closeDialog()"
+  >
+    Cancel
+  </button>
+  <button
+    class="mb-16"
+    mat-raised-button
+    [disabled]="loading"
+    color="primary"
+    (click)="saveNew()"
+  >
+    Save
+  </button>
+</mat-dialog-actions>
