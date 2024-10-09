@@ -22,6 +22,7 @@ import { FormatDateService } from '../services/formatDate.service';
 import { MatTooltip } from '@angular/material/tooltip';
 import { FollowUp } from '../../interfaces/followUp.interface';
 import { DialogEditFollowUpComponent } from '../dialog-edit-follow-up/dialog-edit-follow-up.component';
+import { DialogAddFollowUpComponent } from '../dialog-add-follow-up/dialog-add-follow-up.component';
 
 @Component({
   selector: 'app-user-details',
@@ -90,7 +91,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     const followUpsSnapshot = await getDocs(followUpsRef);
 
     if (followUpsSnapshot.empty) {
-      console.log('No follow-ups found for this user');
+      // console.log('No follow-ups found for this user');
       return null;
     } else {
       const followUps = followUpsSnapshot.docs.map((doc) => {
@@ -101,11 +102,10 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
           createdAt: data['createdAt'] || 0,
           deadline: data['deadline'] || 0,
           description: data['description'] || '',
-          title: data['title'] || '',
+          action: data['action'] || '',
         } as FollowUp;
       });
-
-      console.log('Follow-ups found:', followUps);
+      // console.log('Follow-ups found:', followUps);
       this.followUps = followUps;
       return followUps;
     }
@@ -157,12 +157,27 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
 
   get hasFollowUps(): boolean {
     if (this.followUps.length > 0) {
-      console.log('Follow-ups found:', this.followUps);
+      // console.log('Follow-ups found:', this.followUps);
       return true;
     } else {
-      console.log('No follow-ups found for this user');
+      // console.log('No follow-ups found for this user');
       return false;
     }
+  }
+
+  addNewFollowUp() {
+    const userCopy = { ...this.currentUser[0] };
+    const dialogRef = this.dialog.open(DialogAddFollowUpComponent, {
+      data: {
+        user: userCopy,
+        userId: this.currentUserId,
+        followUps: this.followUps,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(() => {
+      this.getFollowUps(this.currentUserId);
+    });
   }
 
   ngOnDestroy() {
