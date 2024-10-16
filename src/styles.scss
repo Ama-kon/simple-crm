@@ -37,3 +37,39 @@ body {
 .full-width {
     width: 100%;
 }
+
+/************************************* SCROLL BAR *************************************/
+
+::-webkit-scrollbar {
+    width: 9px;
+    height: 11px;
+}
+::-webkit-scrollbar-button {
+    width: 0px;
+    height: 0px;
+}
+::-webkit-scrollbar-thumb {
+    background: #d8d9db;
+    border: 0px none #ffffff;
+    border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #d0d2d6;
+}
+::-webkit-scrollbar-thumb:active {
+    background: #cccfd4;
+}
+::-webkit-scrollbar-track {
+    background: #ffffff;
+    border: 0px none #ffffff;
+    border-radius: 0px;
+}
+::-webkit-scrollbar-track:hover {
+    background: #ffffff;
+}
+::-webkit-scrollbar-track:active {
+    background: #f3f3f3;
+}
+::-webkit-scrollbar-corner {
+    background: transparent;
+}
