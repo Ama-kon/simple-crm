@@ -35,6 +35,18 @@ export class FollowUpComponent {
     this.getAllFollowUps();
   }
 
+  /**
+   * Retrieves all follow-ups for all users from the Firestore database.
+   *
+   * This function performs the following steps:
+   * 1. Fetches all documents from the 'standardData' collection.
+   * 2. For each user document, it retrieves all documents from the 'Follow-ups' subcollection.
+   * 3. Combines user data with follow-up data for each follow-up.
+   * 4. Stores the combined data in the `allFollowUps` array.
+   * 5. Calls the `categorizeFollowUps` function to organize the retrieved data.
+   *
+   * @returns {Promise<void>}
+   */
   async getAllFollowUps() {
     const standardDataRef = collection(this.firestore, 'standardData');
     const standardDataSnapshot = await getDocs(standardDataRef);
@@ -68,6 +80,16 @@ export class FollowUpComponent {
     this.categorizeFollowUps();
   }
 
+  /**
+   * Categorizes the follow-ups stored in the `allFollowUps` array based on their category.
+   *
+   * This function iterates through all follow-ups and distributes them into three category arrays:
+   * - followUpCategory: Contains follow-ups with the category "Follow up"
+   * - leadNurturingCategory: Contains follow-ups with the category "Lead Nurturing"
+   * - afterSalesCategory: Contains follow-ups with the category "After Sales"
+   *
+   * Each follow-up is placed into its corresponding category array for further use in the component.
+   */
   categorizeFollowUps() {
     this.allFollowUps.forEach((followUp) => {
       if (followUp.category == 'Follow up') {
