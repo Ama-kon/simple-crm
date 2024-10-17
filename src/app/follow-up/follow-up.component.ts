@@ -1,10 +1,18 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { collection, Firestore, getDocs } from '@angular/fire/firestore';
+import {
+  collection,
+  DocumentData,
+  Firestore,
+  getDocs,
+  QueryDocumentSnapshot,
+} from '@angular/fire/firestore';
 import { CommonModule, NgFor } from '@angular/common';
 import { FormatDateService } from '../services/formatDate.service';
+import { from, Subscription } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-follow-up',
@@ -14,66 +22,117 @@ import { FormatDateService } from '../services/formatDate.service';
   templateUrl: './follow-up.component.html',
   styleUrl: './follow-up.component.scss',
 })
-export class FollowUpComponent {
+export class FollowUpComponent implements OnInit, OnDestroy {
   private firestore: Firestore = inject(Firestore);
   private formatDateService = inject(FormatDateService);
+  private followUpSubscription: Subscription;
 
   allFollowUps: any[] = [];
   followUpCategory: any[] = [];
   leadNurturingCategory: any[] = [];
   afterSalesCategory: any[] = [];
 
-  constructor() {}
+  constructor(public dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.getAllFollowUps();
   }
 
   /**
-   * Retrieves all follow-ups for all users from the Firestore database.
+   * Retrieves and processes all follow-ups for all users from the Firestore database.
    *
-   * This function performs the following steps:
-   * 1. Fetches all documents from the 'standardData' collection.
-   * 2. For each user document, it retrieves all documents from the 'Follow-ups' subcollection.
-   * 3. Combines user data with follow-up data for each follow-up.
-   * 4. Stores the combined data in the `allFollowUps` array.
-   * 5. Calls the `categorizeFollowUps` function to organize the retrieved data.
-   *
-   * @returns {Promise<void>}
+   * This function:
+   * 1. Shows an overlay to indicate loading.
+   * 2. Creates a reference to the 'standardData' collection in Firestore.
+   * 3. Subscribes to the collection data and processes it asynchronously.
+   * 4. Stores the processed follow-ups in the component's allFollowUps array.
+   * 5. Categorizes the follow-ups.
+   * 6. Hides the loading overlay when done.
    */
   async getAllFollowUps() {
     this.showHideOverlay();
     const standardDataRef = collection(this.firestore, 'standardData');
-    const standardDataSnapshot = await getDocs(standardDataRef);
 
+    this.followUpSubscription = from(getDocs(standardDataRef)).subscribe(
+      async (standardDataSnapshot) => {
+        this.allFollowUps = await this.processUserDocuments(
+          standardDataSnapshot
+        );
+        this.categorizeFollowUps();
+        this.showHideOverlay();
+      }
+    );
+  }
+
+  /**
+   * Processes user documents to extract and compile follow-up data.
+   *
+   * @param standardDataSnapshot - A snapshot of the standard data collection.
+   * @returns A promise that resolves to an array of all processed follow-ups.
+   *
+   * This function:
+   * 1. Iterates through each user document in the snapshot.
+   * 2. Retrieves the 'Follow-ups' subcollection for each user.
+   * 3. If follow-ups exist, processes them using the processFollowUps method.
+   * 4. Concatenates all processed follow-ups into a single array.
+   */
+  async processUserDocuments(standardDataSnapshot: any): Promise<any[]> {
+    let allFollowUps: any[] = [];
     for (const userDoc of standardDataSnapshot.docs) {
       const followUpsCollectionRef = collection(userDoc.ref, 'Follow-ups');
       const followUpsSnapshot = await getDocs(followUpsCollectionRef);
 
       if (!followUpsSnapshot.empty) {
         const userData = userDoc.data();
-
-        followUpsSnapshot.forEach((followUpDoc) => {
-          this.allFollowUps.push({
-            userId: userDoc.id,
-            followUpId: followUpDoc.id,
-            userData: {
-              firstName: userData['firstName'],
-              lastName: userData['lastName'],
-              email: userData['email'],
-              city: userData['city'],
-              street: userData['street'],
-              houseNumber: userData['houseNumber'],
-              zipCode: userData['zipCode'],
-              birthDate: userData['birthDate'],
-            },
-            ...followUpDoc.data(),
-          });
-        });
+        const processedFollowUps = this.processFollowUps(
+          userDoc.id,
+          userData,
+          followUpsSnapshot
+        );
+        allFollowUps = allFollowUps.concat(processedFollowUps);
       }
     }
-    this.categorizeFollowUps();
-    this.showHideOverlay();
+    return allFollowUps;
+  }
+
+  /**
+   * Processes follow-ups for a single user.
+   *
+   * @param userId - The ID of the user.
+   * @param userData - The data of the user.
+   * @param followUpsSnapshot - A snapshot of the user's follow-ups.
+   * @returns An array of processed follow-ups for the user.
+   *
+   * This function:
+   * 1. Maps over each follow-up document in the snapshot.
+   * 2. Creates a new object for each follow-up, combining:
+   *    - User ID
+   *    - Follow-up ID
+   *    - Relevant user data
+   *    - All data from the follow-up document
+   */
+  processFollowUps(
+    userId: string,
+    userData: any,
+    followUpsSnapshot: any
+  ): any[] {
+    return followUpsSnapshot.docs.map(
+      (followUpDoc: QueryDocumentSnapshot<DocumentData>) => ({
+        userId: userId,
+        followUpId: followUpDoc.id,
+        userData: {
+          firstName: userData['firstName'],
+          lastName: userData['lastName'],
+          email: userData['email'],
+          city: userData['city'],
+          street: userData['street'],
+          houseNumber: userData['houseNumber'],
+          zipCode: userData['zipCode'],
+          birthDate: userData['birthDate'],
+        },
+        ...followUpDoc.data(),
+      })
+    );
   }
 
   /**
@@ -125,5 +184,15 @@ export class FollowUpComponent {
   showHideOverlay() {
     const overlay = document.getElementById('overlay');
     overlay?.classList.toggle('d-none');
+  }
+
+  openTask(id: string) {
+    console.log(' task id is:', id);
+  }
+
+  ngOnDestroy() {
+    if (this.followUpSubscription) {
+      this.followUpSubscription.unsubscribe();
+    }
   }
 }
