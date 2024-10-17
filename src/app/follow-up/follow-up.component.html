@@ -1,10 +1,17 @@
+<div id="overlay" class="blur-cover d-none">
+  <img
+    class="logo-loading-animation"
+    src="./../../assets/img/logo.png"
+    alt="logo"
+  />
+</div>
 <h2>Follow up</h2>
 
 <mat-tab-group>
   <mat-tab label="Follow Up">
     <div *ngIf="followUpCategory.length != 0">
       <div *ngFor="let task of followUpCategory; let index = index">
-        <div class="task-card">
+        <div *ngIf="task.status == 'open'" class="task-card">
           <div class="task-card-title">
             <div class="title-follow-up">
               <span class="task-description">{{ task.category }}:</span>
@@ -29,14 +36,46 @@
     </div>
     <br />
     <hr />
-    <h3 class="status">Closed</h3>
+    <h3 class="status">Closed:</h3>
+    <ng-container
+      *ngIf="hasClosedTasks('followUp'); else noClosedTasksTemplate"
+    >
+      <div *ngFor="let task of followUpCategory; let index = index">
+        <div *ngIf="task.status == 'closed'" class="task-card">
+          <div class="task-card-title">
+            <div class="title-follow-up closed">
+              <span class="task-description">{{ task.category }}:</span>
+              {{ task.action }}
+            </div>
+            <div class="task-deadline">
+              Deadline: {{ formatDate(task.deadline) }}
+            </div>
+          </div>
+          <div class="task-customer">
+            {{ task.userData.firstName }} {{ task.userData.lastName }}
+            <!-- with click to open dialog with customer details. -->
+          </div>
+          <div class="task-card-content">
+            {{ task.description }}
+          </div>
+          <div class="task-card-created">
+            Created: {{ formatDate(task.createdAt) }}
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #noClosedTasksTemplate>
+      <div class="task-card empty-card">
+        <span>No closed Follow up available! </span>
+      </div>
+    </ng-template>
   </mat-tab>
 
   <!-- ***************** -->
   <mat-tab label="Lead Nurturing">
     <div *ngIf="leadNurturingCategory.length != 0">
       <div *ngFor="let task of leadNurturingCategory; let index = index">
-        <div class="task-card">
+        <div *ngIf="task.status == 'open'" class="task-card">
           <div class="task-card-title">
             <div class="title-lead-nurturing">
               <span class="task-description">{{ task.category }}: </span>
@@ -59,12 +98,47 @@
         </div>
       </div>
     </div>
+    <br />
+    <hr />
+    <h3 class="status">Closed:</h3>
+    <ng-container
+      *ngIf="hasClosedTasks('leadNurturing'); else noClosedTasksTemplate"
+    >
+      <div *ngFor="let task of leadNurturingCategory; let index = index">
+        <div *ngIf="task.status == 'closed'" class="task-card">
+          <div class="task-card-title">
+            <div class="title-follow-up closed">
+              <span class="task-description">{{ task.category }}:</span>
+              {{ task.action }}
+            </div>
+            <div class="task-deadline">
+              Deadline: {{ formatDate(task.deadline) }}
+            </div>
+          </div>
+          <div class="task-customer">
+            {{ task.userData.firstName }} {{ task.userData.lastName }}
+            <!-- with click to open dialog with customer details. -->
+          </div>
+          <div class="task-card-content">
+            {{ task.description }}
+          </div>
+          <div class="task-card-created">
+            Created: {{ formatDate(task.createdAt) }}
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #noClosedTasksTemplate>
+      <div class="task-card">
+        <span>No closed Lead Nurturing available!</span>
+      </div>
+    </ng-template>
   </mat-tab>
   <!-- ***************** -->
   <mat-tab label="After Sales">
     <div *ngIf="afterSalesCategory.length != 0">
       <div *ngFor="let task of afterSalesCategory; let index = index">
-        <div class="task-card">
+        <div *ngIf="task.status == 'open'" class="task-card">
           <div class="task-card-title">
             <div class="title-after-sales">
               <span class="task-description">{{ task.category }}:</span>
@@ -87,5 +161,40 @@
         </div>
       </div>
     </div>
+    <br />
+    <hr />
+    <h3 class="status">Closed:</h3>
+    <ng-container
+      *ngIf="hasClosedTasks('afterSales'); else noClosedTasksTemplate"
+    >
+      <div *ngFor="let task of afterSalesCategory; let index = index">
+        <div *ngIf="task.status == 'closed'" class="task-card">
+          <div class="task-card-title">
+            <div class="title-follow-up closed">
+              <span class="task-description">{{ task.category }}:</span>
+              {{ task.action }}
+            </div>
+            <div class="task-deadline">
+              Deadline: {{ formatDate(task.deadline) }}
+            </div>
+          </div>
+          <div class="task-customer">
+            {{ task.userData.firstName }} {{ task.userData.lastName }}
+            <!-- with click to open dialog with customer details. -->
+          </div>
+          <div class="task-card-content">
+            {{ task.description }}
+          </div>
+          <div class="task-card-created">
+            Created: {{ formatDate(task.createdAt) }}
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #noClosedTasksTemplate>
+      <div class="task-card">
+        <span>No closed After sale available!</span>
+      </div>
+    </ng-template>
   </mat-tab>
 </mat-tab-group>
