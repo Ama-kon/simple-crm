@@ -103,6 +103,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
           deadline: data['deadline'] || 0,
           description: data['description'] || '',
           action: data['action'] || '',
+          status: data['status'] || '',
         } as FollowUp;
       });
       // console.log('Follow-ups found:', followUps);
