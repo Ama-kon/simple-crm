@@ -11,7 +11,11 @@
   <mat-tab label="Follow Up">
     <div *ngIf="followUpCategory.length != 0">
       <div *ngFor="let task of followUpCategory; let index = index">
-        <div *ngIf="task.status == 'open'" class="task-card">
+        <div
+          *ngIf="task.status == 'open'"
+          class="task-card"
+          (click)="openTask(task.id)"
+        >
           <div class="task-card-title">
             <div class="title-follow-up">
               <span class="task-description">{{ task.category }}:</span>
@@ -75,7 +79,11 @@
   <mat-tab label="Lead Nurturing">
     <div *ngIf="leadNurturingCategory.length != 0">
       <div *ngFor="let task of leadNurturingCategory; let index = index">
-        <div *ngIf="task.status == 'open'" class="task-card">
+        <div
+          *ngIf="task.status == 'open'"
+          class="task-card"
+          (click)="openTask(task.id)"
+        >
           <div class="task-card-title">
             <div class="title-lead-nurturing">
               <span class="task-description">{{ task.category }}: </span>
@@ -138,7 +146,11 @@
   <mat-tab label="After Sales">
     <div *ngIf="afterSalesCategory.length != 0">
       <div *ngFor="let task of afterSalesCategory; let index = index">
-        <div *ngIf="task.status == 'open'" class="task-card">
+        <div
+          *ngIf="task.status == 'open'"
+          class="task-card"
+          (click)="openTask(task.id)"
+        >
           <div class="task-card-title">
             <div class="title-after-sales">
               <span class="task-description">{{ task.category }}:</span>
