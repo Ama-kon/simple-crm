@@ -99,11 +99,15 @@ export class DialogAddFollowUpComponent implements OnInit {
     const userDocRef = doc(this.firestore, 'standardData', this.data.userId);
     const followUpsCollectionRef = collection(userDocRef, 'Follow-ups');
     this.newFollowUp.deadline = new Date(this.newFollowUp.deadline).getTime();
-    addDoc(followUpsCollectionRef, this.newFollowUp).then(() => {
-      this.userUpdated.emit();
-      console.log('newFollowUp', this.newFollowUp);
-      this.dialog.close();
-      this.loading = false;
+
+    addDoc(followUpsCollectionRef, this.newFollowUp).then((docRef) => {
+      this.newFollowUp.id = docRef.id;
+
+      setDoc(docRef, this.newFollowUp).then(() => {
+        this.userUpdated.emit();
+        this.dialog.close();
+        this.loading = false;
+      });
     });
   }
 
