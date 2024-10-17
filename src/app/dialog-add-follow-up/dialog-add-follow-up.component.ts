@@ -72,6 +72,7 @@ export class DialogAddFollowUpComponent implements OnInit {
     deadline: 0,
     description: '',
     action: '',
+    status: 'open',
   };
   private firestore: Firestore = inject(Firestore);
   private formatDateService = inject(FormatDateService);
