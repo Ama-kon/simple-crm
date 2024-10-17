@@ -2,13 +2,7 @@ import { Component, inject } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import {
-  collection,
-  doc,
-  Firestore,
-  getDoc,
-  getDocs,
-} from '@angular/fire/firestore';
+import { collection, Firestore, getDocs } from '@angular/fire/firestore';
 import { CommonModule, NgFor } from '@angular/common';
 import { FormatDateService } from '../services/formatDate.service';
 
@@ -48,6 +42,7 @@ export class FollowUpComponent {
    * @returns {Promise<void>}
    */
   async getAllFollowUps() {
+    this.showHideOverlay();
     const standardDataRef = collection(this.firestore, 'standardData');
     const standardDataSnapshot = await getDocs(standardDataRef);
 
@@ -78,6 +73,7 @@ export class FollowUpComponent {
       }
     }
     this.categorizeFollowUps();
+    this.showHideOverlay();
   }
 
   /**
@@ -104,5 +100,30 @@ export class FollowUpComponent {
 
   formatDate(date: string) {
     return this.formatDateService.formatDate(date);
+  }
+
+  hasClosedTasks(
+    category: 'followUp' | 'leadNurturing' | 'afterSales'
+  ): boolean {
+    let arrayToCheck: any[];
+    switch (category) {
+      case 'followUp':
+        arrayToCheck = this.followUpCategory;
+        break;
+      case 'leadNurturing':
+        arrayToCheck = this.leadNurturingCategory;
+        break;
+      case 'afterSales':
+        arrayToCheck = this.afterSalesCategory;
+        break;
+      default:
+        arrayToCheck = [];
+    }
+    return arrayToCheck.some((task) => task.status === 'closed');
+  }
+
+  showHideOverlay() {
+    const overlay = document.getElementById('overlay');
+    overlay?.classList.toggle('d-none');
   }
 }
