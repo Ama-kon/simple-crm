@@ -5,4 +5,5 @@ export interface FollowUp {
   deadline: number;
   description: string;
   action: string;
+  status: string;
 }
