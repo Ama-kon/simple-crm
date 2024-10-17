@@ -59,13 +59,11 @@ export class DialogEditFollowUpComponent {
       followUps: FollowUp[];
     }
   ) {
-    console.log('data', data);
     this.user = data.user;
     this.userId = data.userId;
     this.followUpId = data.followUpId;
     this.index = data.index;
     this.currentFollowUp = this.data.followUps[this.data.index];
-    console.log('currentFollowUp', this.currentFollowUp.deadline);
   }
 
   formatDate(date: any): string {
@@ -79,12 +77,10 @@ export class DialogEditFollowUpComponent {
       'Follow-ups',
       this.currentFollowUp.id
     );
-
     const updatedFollowUp = {
       ...this.currentFollowUp,
       deadline: new Date(this.currentFollowUp.deadline).getTime(),
     };
-
     setDoc(followUpDocRef, updatedFollowUp).then(() => {
       this.loading = false;
       this.userUpdated.emit();
