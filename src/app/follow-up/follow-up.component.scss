@@ -1,3 +1,24 @@
+.blur-cover {
+    z-index: 100;
+    background-color: #dededeba;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.logo-loading-animation {
+    left: 50%;
+    top: 35%;
+    z-index: 150;
+    position: relative;
+    width: 16vw;
+    height: 20vh;
+    animation: rotate-and-pulse 2s ease-in-out infinite;
+}
+
 .task-card {
     position: relative;
     display: flex;
@@ -11,6 +32,11 @@
     box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.08);
     cursor: pointer;
     margin: 24px 0;
+}
+
+.empty-card {
+    border: 1px dotted #d0d0d0;
+    background: #e7e7e7b5;
 }
 
 .title-follow-up,
@@ -39,6 +65,10 @@
     justify-content: space-between;
 }
 
+.closed {
+    background-color: #bbb9b9;
+}
+
 .task-customer {
     font-size: 18px;
     font-weight: 600;
@@ -58,4 +88,16 @@
     font-weight: 500;
     color: #82827d;
     margin: 24px 0;
+}
+
+@keyframes rotate-and-pulse {
+    0% {
+        transform: rotate(0deg) scale(1);
+    }
+    50% {
+        transform: rotate(180deg) scale(1.1);
+    }
+    100% {
+        transform: rotate(360deg) scale(1);
+    }
 }
