@@ -14,7 +14,7 @@
         <div
           *ngIf="task.status == 'open'"
           class="task-card"
-          (click)="openTask(task.id)"
+          (click)="editDialog(task)"
         >
           <div class="task-card-title">
             <div class="title-follow-up">
@@ -82,7 +82,7 @@
         <div
           *ngIf="task.status == 'open'"
           class="task-card"
-          (click)="openTask(task.id)"
+          (click)="editDialog(task)"
         >
           <div class="task-card-title">
             <div class="title-lead-nurturing">
@@ -149,7 +149,7 @@
         <div
           *ngIf="task.status == 'open'"
           class="task-card"
-          (click)="openTask(task.id)"
+          (click)="editDialog(task)"
         >
           <div class="task-card-title">
             <div class="title-after-sales">
