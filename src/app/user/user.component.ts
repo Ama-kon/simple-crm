@@ -63,7 +63,6 @@ export class UserComponent implements OnInit, OnDestroy {
         this.filterUsers();
       }
     });
-    console.log(this.searchTerm);
   }
 
   openDialog(): void {

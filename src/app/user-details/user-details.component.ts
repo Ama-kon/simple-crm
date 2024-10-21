@@ -91,7 +91,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     const followUpsSnapshot = await getDocs(followUpsRef);
 
     if (followUpsSnapshot.empty) {
-      // console.log('No follow-ups found for this user');
       return null;
     } else {
       const followUps = followUpsSnapshot.docs.map((doc) => {
@@ -106,7 +105,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
           status: data['status'] || '',
         } as FollowUp;
       });
-      // console.log('Follow-ups found:', followUps);
       this.followUps = followUps;
       return followUps;
     }
@@ -158,10 +156,8 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
 
   get hasFollowUps(): boolean {
     if (this.followUps.length > 0) {
-      // console.log('Follow-ups found:', this.followUps);
       return true;
     } else {
-      // console.log('No follow-ups found for this user');
       return false;
     }
   }
