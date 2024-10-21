@@ -235,9 +235,9 @@ export class FollowUpComponent implements OnInit, OnDestroy {
         index: this.indexOfFollowUp,
       },
     });
-    this.emptyAllArrays();
     const dialogComponent = dialogRef.componentInstance;
     dialogComponent.userUpdated.subscribe(() => {
+      this.emptyAllArrays();
       this.getAllFollowUps();
     });
   }
