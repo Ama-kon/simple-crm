@@ -4,8 +4,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import {
   collection,
+  doc,
   DocumentData,
   Firestore,
+  getDoc,
   getDocs,
   QueryDocumentSnapshot,
 } from '@angular/fire/firestore';
@@ -13,11 +15,20 @@ import { CommonModule, NgFor } from '@angular/common';
 import { FormatDateService } from '../services/formatDate.service';
 import { from, Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
+import { DialogEditFollowUpComponent } from '../dialog-edit-follow-up/dialog-edit-follow-up.component';
+import { User } from '../../models/user.class';
 
 @Component({
   selector: 'app-follow-up',
   standalone: true,
-  imports: [MatTabsModule, MatIconModule, MatButtonModule, CommonModule, NgFor],
+  imports: [
+    MatTabsModule,
+    MatIconModule,
+    MatButtonModule,
+    CommonModule,
+    NgFor,
+    DialogEditFollowUpComponent,
+  ],
   providers: [FormatDateService],
   templateUrl: './follow-up.component.html',
   styleUrl: './follow-up.component.scss',
@@ -26,11 +37,15 @@ export class FollowUpComponent implements OnInit, OnDestroy {
   private firestore: Firestore = inject(Firestore);
   private formatDateService = inject(FormatDateService);
   private followUpSubscription: Subscription;
+  private userSubscription: Subscription;
 
   allFollowUps: any[] = [];
   followUpCategory: any[] = [];
   leadNurturingCategory: any[] = [];
   afterSalesCategory: any[] = [];
+  currentUser: User[] = [];
+  currentUserFollowUps: any[] = [];
+  indexOfFollowUp: number;
 
   constructor(public dialog: MatDialog) {}
 
@@ -186,13 +201,72 @@ export class FollowUpComponent implements OnInit, OnDestroy {
     overlay?.classList.toggle('d-none');
   }
 
-  openTask(id: string) {
-    console.log(' task id is:', id);
+  async editDialog(task: any) {
+    this.showHideOverlay();
+    await this.getCurrentUser(task.userId);
+    await this.getIndexOfFollowUp(task.userId, task.followUpId);
+    this.openDialog(task);
+    this.showHideOverlay();
+  }
+
+  async getIndexOfFollowUp(userId: string, followUpId: string) {
+    const userCollection = collection(this.firestore, 'standardData');
+    const userDocRef = doc(userCollection, userId);
+    const followUpsCollectionRef = collection(userDocRef, 'Follow-ups');
+
+    const followUpsSnapshot = await getDocs(followUpsCollectionRef);
+    const followUps = followUpsSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    this.currentUserFollowUps = followUps;
+    const index = followUps.findIndex((followUp) => followUp.id === followUpId);
+    this.indexOfFollowUp = index;
+  }
+
+  openDialog(task: any) {
+    const userCopy = { ...this.currentUser };
+    const dialogRef = this.dialog.open(DialogEditFollowUpComponent, {
+      data: {
+        user: userCopy,
+        userId: task.userId,
+        followUps: this.currentUserFollowUps,
+        followUpId: task.followUpId,
+        index: this.indexOfFollowUp,
+      },
+    });
+    this.emptyAllArrays();
+    const dialogComponent = dialogRef.componentInstance;
+    dialogComponent.userUpdated.subscribe(() => {
+      this.getAllFollowUps();
+    });
+  }
+
+  getCurrentUser(id: string) {
+    const userCollection = collection(this.firestore, 'standardData');
+    const currentUserRef = doc(userCollection, id);
+    this.userSubscription = from(getDoc(currentUserRef)).subscribe(
+      (document) => {
+        if (document.exists()) {
+          this.currentUser = [document.data() as User];
+        }
+      }
+    );
+  }
+
+  emptyAllArrays() {
+    this.followUpCategory = [];
+    this.leadNurturingCategory = [];
+    this.afterSalesCategory = [];
+    this.allFollowUps = [];
   }
 
   ngOnDestroy() {
     if (this.followUpSubscription) {
       this.followUpSubscription.unsubscribe();
+    }
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
     }
   }
 }
