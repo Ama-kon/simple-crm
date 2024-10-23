@@ -91,6 +91,12 @@
     margin: 24px 0;
 }
 
+.urgent {
+    border-left: 4px solid #ff00004a;
+    border-right: 4px solid #ff00004a;
+    background-color: rgb(248 156 156 / 10%);
+}
+
 @keyframes rotate-and-pulse {
     0% {
         transform: rotate(0deg) scale(1);
