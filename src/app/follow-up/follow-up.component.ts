@@ -170,6 +170,7 @@ export class FollowUpComponent implements OnInit, OnDestroy {
         this.afterSalesCategory.push(followUp);
       }
     });
+    this.sortByDeadline();
   }
 
   formatDate(date: string) {
@@ -259,6 +260,43 @@ export class FollowUpComponent implements OnInit, OnDestroy {
     this.leadNurturingCategory = [];
     this.afterSalesCategory = [];
     this.allFollowUps = [];
+  }
+
+  /**
+   * Sorts tasks in multiple categories by their deadline in ascending order.
+   *
+   * This function iterates over three categories: `followUpCategory`, `leadNurturingCategory`,
+   * and `afterSalesCategory`. Each category is expected to be an array of objects, where each
+   * object contains a `deadline` property (a valid date string). The function converts these
+   * deadlines to timestamps and sorts each category in place based on the earliest deadline.
+   *
+   * @function
+   * @returns {void} - This function does not return any value. It sorts the arrays in place.
+   */
+  sortByDeadline() {
+    const sortFunction = (a: any, b: any) => {
+      const dateA = new Date(a.deadline).getTime();
+      const dateB = new Date(b.deadline).getTime();
+      return dateA - dateB;
+    };
+    this.followUpCategory.sort(sortFunction);
+    this.leadNurturingCategory.sort(sortFunction);
+    this.afterSalesCategory.sort(sortFunction);
+  }
+
+  /**
+   * Determines if a task deadline is within the next 5 days.
+   *
+   * @param {Date | string} deadline - The deadline date or a date string for the task.
+   * @returns {boolean} Returns `true` if the task's deadline is within the next 5 days, otherwise `false`.
+   *
+   */
+  isUrgent(deadline: any): boolean {
+    const today = new Date().getTime();
+    const taskDeadline = new Date(deadline).getTime();
+    const fiveDaysInMs = 5 * 24 * 60 * 60 * 1000;
+    const timeDifference = taskDeadline - today;
+    return timeDifference <= fiveDaysInMs && timeDifference > 0;
   }
 
   ngOnDestroy() {
