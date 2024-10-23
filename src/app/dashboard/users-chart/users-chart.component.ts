@@ -17,6 +17,10 @@ export class UsersChartComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
+    this.showChart();
+  }
+
+  showChart() {
     const documentStyle = getComputedStyle(document.documentElement);
     const textColor = documentStyle.getPropertyValue('--text-color');
     const textColorSecondary = documentStyle.getPropertyValue(
@@ -44,13 +48,13 @@ export class UsersChartComponent implements OnInit {
           label: '2023',
           backgroundColor: documentStyle.getPropertyValue('--blue-500'),
           borderColor: documentStyle.getPropertyValue('--blue-500'),
-          data: [28, 42, 8, 39, 48, 46, 36, 39, 12, 18, 3, 24],
+          data: [8, 12, 8, 6, 10, 4, 7, 8, 3, 9, 13, 2],
         },
         {
           label: '2024',
           backgroundColor: documentStyle.getPropertyValue('--pink-500'),
           borderColor: documentStyle.getPropertyValue('--pink-500'),
-          data: [28, 48, 40, 45, 55, 27, 32, 65, 32],
+          data: [4, 14, 11, 9, 3, 7, 10, 7, 10, 12],
         },
       ],
     };
