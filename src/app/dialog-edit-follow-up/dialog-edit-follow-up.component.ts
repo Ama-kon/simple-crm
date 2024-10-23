@@ -17,6 +17,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { CommonModule } from '@angular/common';
 import { FollowUp } from '../../interfaces/followUp.interface';
 import { FormatDateService } from '../services/formatDate.service';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-dialog-edit-follow-up',
@@ -31,6 +32,7 @@ import { FormatDateService } from '../services/formatDate.service';
     FormsModule,
     MatProgressBarModule,
     CommonModule,
+    MatSelectModule,
   ],
   providers: [provideNativeDateAdapter(), FormatDateService],
   templateUrl: './dialog-edit-follow-up.component.html',
@@ -43,6 +45,13 @@ export class DialogEditFollowUpComponent {
   index: number;
   currentFollowUp: FollowUp;
   loading = false;
+
+  actions = [
+    { value: 'Call' },
+    { value: 'Email' },
+    { value: 'Meeting' },
+    { value: 'Other' },
+  ];
 
   private firestore: Firestore = inject(Firestore);
   private formatDateService = inject(FormatDateService);

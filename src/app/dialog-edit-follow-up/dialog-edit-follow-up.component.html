@@ -6,12 +6,14 @@
   <div>
     <mat-form-field class="mr-16 full-width" appearance="outline">
       <mat-label>Action</mat-label>
-      <input
-        [disabled]="loading"
+      <mat-select
         [(ngModel)]="currentFollowUp.action"
-        matInput
-        placeholder="New action"
-      />
+        [(ngModel)]="currentFollowUp.action"
+      >
+        @for (action of actions; track action) {
+        <mat-option [value]="action.value">{{ action.value }} </mat-option>
+        }
+      </mat-select>
     </mat-form-field>
   </div>
 
