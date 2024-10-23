@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { collection, Firestore, getDocs } from '@angular/fire/firestore';
 import { ChartModule } from 'primeng/chart';
+import { from, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-follow-ups',
@@ -10,10 +12,49 @@ import { ChartModule } from 'primeng/chart';
   styleUrl: './follow-ups.component.scss',
 })
 export class FollowUpsComponent implements OnInit {
+  firestore: Firestore = inject(Firestore);
   data: any;
   options: any;
+  allFollowUps: any[] = [];
+  doneFollowUps: any[] = [];
+  undoneFollowUps: any[] = [];
+  followUpSubscription: Subscription;
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.getAllFollowUps();
+    this.showChart();
+  }
+
+  async getAllFollowUps() {
+    const standardDataRef = collection(this.firestore, 'standardData');
+    const querySnapshot = await getDocs(standardDataRef);
+
+    for (const doc of querySnapshot.docs) {
+      const followUpsRef = collection(
+        this.firestore,
+        `standardData/${doc.id}/Follow-ups`
+      );
+      const followUpsSnapshot = await getDocs(followUpsRef);
+
+      followUpsSnapshot.forEach((followUp) => {
+        this.allFollowUps.push(followUp.data());
+      });
+    }
+    this.filterDoneFollowUps();
+  }
+
+  filterDoneFollowUps() {
+    this.doneFollowUps = this.allFollowUps.filter(
+      (followUp) => followUp.status == 'closed'
+    );
+    this.undoneFollowUps = this.allFollowUps.filter(
+      (followUp) => followUp.status != 'closed'
+    );
+    console.log('gemachte:', this.doneFollowUps);
+    console.log('ungemachte:', this.undoneFollowUps);
+  }
+
+  showChart() {
     const documentStyle = getComputedStyle(document.documentElement);
     const textColor = documentStyle.getPropertyValue('--text-color');
 
@@ -21,7 +62,7 @@ export class FollowUpsComponent implements OnInit {
       labels: ['Follow ups', 'Done'],
       datasets: [
         {
-          data: [148, 25],
+          data: [this.undoneFollowUps.length, this.doneFollowUps.length],
           backgroundColor: [
             documentStyle.getPropertyValue('--blue-500'),
             documentStyle.getPropertyValue('--yellow-500'),
