@@ -3,6 +3,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { UserComponent } from './user/user.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { FollowUpComponent } from './follow-up/follow-up.component';
+import { PropertiesComponent } from './properties/properties.component';
 
 export const routes: Routes = [
   {
@@ -20,5 +21,9 @@ export const routes: Routes = [
   {
     path: 'followUp',
     component: FollowUpComponent,
+  },
+  {
+    path: 'properties',
+    component: PropertiesComponent,
   },
 ];
