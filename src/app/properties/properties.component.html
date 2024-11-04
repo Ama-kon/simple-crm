@@ -1,0 +1,49 @@
+<h1>Properties List</h1>
+
+<div class="container">
+  <mat-card *ngFor="let property of properties">
+    <mat-card-header>
+      <mat-card-title>{{ property.object }}</mat-card-title>
+      <mat-card-subtitle>{{ property.location }}</mat-card-subtitle>
+    </mat-card-header>
+    <img
+      mat-card-image
+      src="/assets/3-FH-Generationenhaus---SD-259-V372---_Generationenhaus.jpg"
+      alt="{{ property.object }}"
+    />
+    <mat-card-content>
+      <div class="property-details">
+        <p class="price">{{ property.price }} €</p>
+        <p>
+          <strong>Square meter price:</strong>
+          {{ property.square_meter_price }} €
+        </p>
+        <p><strong>Year Built:</strong> {{ property.year_built }}</p>
+        <p><strong>Living Space:</strong> {{ property.living_space }} m²</p>
+        <p *ngIf="property.usable_area">
+          <strong>Usable Area:</strong> {{ property.usable_area }} m²
+        </p>
+        <p *ngIf="property.land_area">
+          <strong>Land Area:</strong> {{ property.land_area }} m²
+        </p>
+        <p><strong>Parking:</strong> {{ property.parking }}</p>
+        <p><strong>Available From:</strong> {{ property.available_from }}</p>
+      </div>
+
+      <div class="owner-details">
+        <p><strong>Owner:</strong> {{ property.owner }}</p>
+        <p><strong>Phone:</strong> {{ property.owner_phone }}</p>
+        <p>
+          <strong>Email:</strong>
+          <a [href]="'mailto:' + property.owner_email">{{
+            property.owner_email
+          }}</a>
+        </p>
+        <p><strong>Address:</strong> {{ property.owner_address }}</p>
+      </div>
+    </mat-card-content>
+    <!-- <mat-card-actions>
+      <button mat-button>View Details</button>
+    </mat-card-actions> -->
+  </mat-card>
+</div>
