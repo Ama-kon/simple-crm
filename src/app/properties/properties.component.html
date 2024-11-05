@@ -15,31 +15,31 @@
       <div class="property-details">
         <p class="price">{{ property.price }} €</p>
         <p>
-          <strong>Square meter price:</strong>
+          <span>Square meter price:</span>
           {{ property.square_meter_price }} €
         </p>
-        <p><strong>Year Built:</strong> {{ property.year_built }}</p>
-        <p><strong>Living Space:</strong> {{ property.living_space }} m²</p>
+        <p><span>Year Built:</span> {{ property.year_built }}</p>
+        <p><span>Living Space:</span> {{ property.living_space }} m²</p>
         <p *ngIf="property.usable_area">
-          <strong>Usable Area:</strong> {{ property.usable_area }} m²
+          <span>Usable Area:</span> {{ property.usable_area }} m²
         </p>
         <p *ngIf="property.land_area">
-          <strong>Land Area:</strong> {{ property.land_area }} m²
+          <span>Land Area:</span> {{ property.land_area }} m²
         </p>
-        <p><strong>Parking:</strong> {{ property.parking }}</p>
-        <p><strong>Available From:</strong> {{ property.available_from }}</p>
+        <p><span>Parking:</span> {{ property.parking }}</p>
+        <p><span>Available From:</span> {{ property.available_from }}</p>
       </div>
 
       <div class="owner-details">
-        <p><strong>Owner:</strong> {{ property.owner }}</p>
-        <p><strong>Phone:</strong> {{ property.owner_phone }}</p>
+        <p><span>Owner:</span> {{ property.owner }}</p>
+        <p><span>Phone:</span> {{ property.owner_phone }}</p>
         <p>
-          <strong>Email:</strong>
+          <span>Email:</span>
           <a [href]="'mailto:' + property.owner_email">{{
             property.owner_email
           }}</a>
         </p>
-        <p><strong>Address:</strong> {{ property.owner_address }}</p>
+        <p><span>Address:</span> {{ property.owner_address }}</p>
       </div>
     </mat-card-content>
     <!-- <mat-card-actions>
