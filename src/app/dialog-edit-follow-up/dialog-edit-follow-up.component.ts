@@ -45,6 +45,7 @@ export class DialogEditFollowUpComponent {
   index: number;
   currentFollowUp: FollowUp;
   loading = false;
+  minDate: Date = new Date();
 
   actions = [
     { value: 'Call' },

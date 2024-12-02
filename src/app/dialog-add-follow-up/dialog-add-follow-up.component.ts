@@ -54,6 +54,7 @@ import { MatSelectModule } from '@angular/material/select';
 export class DialogAddFollowUpComponent implements OnInit {
   user: User;
   loading = false;
+  minDate: Date = new Date();
   categories = [
     { value: 'Follow up' },
     { value: 'Lead Nurturing' },
@@ -74,6 +75,7 @@ export class DialogAddFollowUpComponent implements OnInit {
     action: '',
     status: 'open',
   };
+
   private firestore: Firestore = inject(Firestore);
   private formatDateService = inject(FormatDateService);
   @Output() userUpdated = new EventEmitter<void>();

@@ -42,6 +42,7 @@
     <mat-form-field class="mr-16 full-width" appearance="outline">
       <mat-label>Deadline</mat-label>
       <input
+        [min]="minDate"
         [disabled]="loading"
         matInput
         [(ngModel)]="newFollowUp.deadline"
