@@ -3,47 +3,53 @@
 <div class="container">
   <mat-card *ngFor="let property of properties">
     <mat-card-header>
-      <mat-card-title>{{ property.object }}</mat-card-title>
-      <mat-card-subtitle>{{ property.location }}</mat-card-subtitle>
+      <mat-card-title>{{ property.type }}</mat-card-title>
+      <mat-card-subtitle>{{ property.streetNumber }}</mat-card-subtitle>
+      <mat-card-subtitle>{{ property.zipCity }}</mat-card-subtitle>
     </mat-card-header>
     <img
       mat-card-image
       src="/assets/3-FH-Generationenhaus---SD-259-V372---_Generationenhaus.jpg"
-      alt="{{ property.object }}"
+      alt="{{ property.type }}"
     />
     <mat-card-content>
       <div class="property-details">
         <p class="price">{{ property.price }} €</p>
         <p>
           <span>Square meter price:</span>
-          {{ property.square_meter_price }} €
+          {{ property.sqmPrice }} €
         </p>
-        <p><span>Year Built:</span> {{ property.year_built }}</p>
-        <p><span>Living Space:</span> {{ property.living_space }} m²</p>
-        <p *ngIf="property.usable_area">
-          <span>Usable Area:</span> {{ property.usable_area }} m²
-        </p>
-        <p *ngIf="property.land_area">
-          <span>Land Area:</span> {{ property.land_area }} m²
+        <p><span>Year Built:</span> {{ property.yearbuilt }}</p>
+        <p><span>Living Space:</span> {{ property.livingSpace }} m²</p>
+        <p *ngIf="property.landArea">
+          <span>Land Area:</span> {{ property.landArea }} m²
         </p>
         <p><span>Parking:</span> {{ property.parking }}</p>
-        <p><span>Available From:</span> {{ property.available_from }}</p>
+        <p><span>Available From:</span> {{ property.available }}</p>
       </div>
 
       <div class="owner-details">
         <p><span>Owner:</span> {{ property.owner }}</p>
-        <p><span>Phone:</span> {{ property.owner_phone }}</p>
+        <p><span>Phone:</span> {{ property.ownerPhone }}</p>
         <p>
           <span>Email:</span>
-          <a [href]="'mailto:' + property.owner_email">{{
-            property.owner_email
+          <a [href]="'mailto:' + property.ownerMail">{{
+            property.ownerMail
           }}</a>
         </p>
-        <p><span>Address:</span> {{ property.owner_address }}</p>
+        <p><span>Address:</span> {{ property.ownerAdress }}</p>
       </div>
     </mat-card-content>
-    <!-- <mat-card-actions>
-      <button mat-button>View Details</button>
-    </mat-card-actions> -->
   </mat-card>
+
+  <button
+    class="add-button"
+    mat-fab
+    matTooltip="Add a new property"
+    [matTooltipPosition]="'above'"
+    color="primary"
+    (click)="openDialog()"
+  >
+    <mat-icon>add</mat-icon>
+  </button>
 </div>
