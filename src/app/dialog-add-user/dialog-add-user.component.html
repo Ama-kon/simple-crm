@@ -1,9 +1,9 @@
 <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
-<h2 mat-dialog-title>Add new user</h2>
+<h2 mat-dialog-title>Add new client</h2>
 <mat-dialog-content>
   <div>
     <mat-form-field class="mr-16" appearance="outline">
-      <mat-label>Enter your first name</mat-label>
+      <mat-label>Enter first name</mat-label>
       <input
         [disabled]="loading"
         [(ngModel)]="user.firstName"
@@ -12,7 +12,7 @@
       />
     </mat-form-field>
     <mat-form-field appearance="outline">
-      <mat-label>Enter your last name</mat-label>
+      <mat-label>Enter last name</mat-label>
       <input
         [disabled]="loading"
         [(ngModel)]="user.lastName"
@@ -23,7 +23,7 @@
   </div>
   <div>
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Enter your E-Mail</mat-label>
+      <mat-label>Enter E-Mail</mat-label>
       <input
         [disabled]="loading"
         [(ngModel)]="user.email"
