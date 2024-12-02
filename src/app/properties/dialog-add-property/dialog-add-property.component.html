@@ -1,0 +1,129 @@
+<div class="dialog-container">
+  <h1 mat-dialog-title>Add New Property</h1>
+
+  <div mat-dialog-content>
+    <form [formGroup]="propertyForm">
+      <mat-form-field appearance="outline" class="full-width mt-16">
+        <mat-label>Object Name</mat-label>
+        <mat-select required>
+          <mat-option value="Apartment">Apartment</mat-option>
+          <mat-option value="Single-family home">Single-family home</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Location</mat-label>
+        <input matInput placeholder="Enter location" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Price (€)</mat-label>
+        <input
+          matInput
+          type="number"
+          formControlName="price"
+          placeholder="Enter price"
+          required
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Square Meter Price (€)</mat-label>
+        <input
+          matInput
+          type="number"
+          placeholder="Enter square meter price"
+          formControlName="squareMeterPrice"
+          readonly="true"
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width" required>
+        <mat-label>Year Built</mat-label>
+        <input matInput type="number" placeholder="Enter year built" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Living Space (m²)</mat-label>
+        <input
+          matInput
+          type="number"
+          placeholder="Enter living space"
+          formControlName="livingSpace"
+          required
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Usable Area (m²)</mat-label>
+        <input
+          matInput
+          type="number"
+          placeholder="Enter usable area"
+          required
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Land Area (m²)</mat-label>
+        <input matInput type="number" placeholder="Enter land area" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Parking</mat-label>
+        <mat-select>
+          <mat-option value="1 parking space">1 parking space</mat-option>
+          <mat-option value="2 parking space">2 parking space</mat-option>
+          <mat-option value="garage">garage</mat-option>
+          <mat-option value="double garage">double garage</mat-option>
+          <mat-option value="carport">carport</mat-option>
+          <mat-option value="underground parking"
+            >underground parking</mat-option
+          >
+          <mat-option value="street parking">street parking</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Available From</mat-label>
+        <input matInput [min]="minDate" [matDatepicker]="picker" />
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="picker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <h2 class="mt-16">Owner Information</h2>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Owner Name</mat-label>
+        <input matInput placeholder="Enter owner name" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Owner Phone</mat-label>
+        <input matInput placeholder="Enter owner phone" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Owner Email</mat-label>
+        <input matInput type="email" placeholder="Enter owner email" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Owner Address</mat-label>
+        <textarea
+          matInput
+          placeholder="Enter owner address"
+          required
+        ></textarea>
+      </mat-form-field>
+    </form>
+  </div>
+
+  <div mat-dialog-actions class="ml-16">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button color="primary">Save</button>
+  </div>
+</div>
