@@ -12,9 +12,15 @@ import {
 export class ImageUploadService {
   private storage: Storage = inject(Storage);
 
-  async uploadImage(file: File, path: string): Promise<string> {
-    const storageRef = ref(this.storage, path);
-    await uploadBytes(storageRef, file);
-    return await getDownloadURL(storageRef);
+  async uploadPropertyImages(files: File[]): Promise<string[]> {
+    const uploadPromises = files.map(async (file) => {
+      const timestamp = new Date().getTime();
+      const path = `properties/${timestamp}_${file.name}`;
+      const storageRef = ref(this.storage, path);
+      const snapshot = await uploadBytes(storageRef, file);
+      return getDownloadURL(snapshot.ref);
+    });
+
+    return Promise.all(uploadPromises);
   }
 }
