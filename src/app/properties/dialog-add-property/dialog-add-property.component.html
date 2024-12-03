@@ -1,19 +1,33 @@
 <div class="dialog-container">
   <h1 mat-dialog-title>Add New Property</h1>
-
   <div mat-dialog-content>
     <form [formGroup]="propertyForm">
       <mat-form-field appearance="outline" class="full-width mt-16">
-        <mat-label>Object Name</mat-label>
-        <mat-select required>
+        <mat-label>Object Type</mat-label>
+        <mat-select formControlName="type" required>
           <mat-option value="Apartment">Apartment</mat-option>
           <mat-option value="Single-family home">Single-family home</mat-option>
         </mat-select>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Location</mat-label>
-        <input matInput placeholder="Enter location" required />
+        <mat-label>Street + House Number</mat-label>
+        <input
+          matInput
+          formControlName="streetNumber"
+          placeholder="Enter street + number"
+          required
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Zip Code + City</mat-label>
+        <input
+          matInput
+          formControlName="zipCity"
+          placeholder="Enter Zipcode + City"
+          required
+        />
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">
@@ -32,15 +46,21 @@
         <input
           matInput
           type="number"
+          formControlName="sqmPrice"
           placeholder="Enter square meter price"
-          formControlName="squareMeterPrice"
-          readonly="true"
+          readonly
         />
       </mat-form-field>
 
-      <mat-form-field appearance="outline" class="full-width" required>
+      <mat-form-field appearance="outline" class="full-width">
         <mat-label>Year Built</mat-label>
-        <input matInput type="number" placeholder="Enter year built" required />
+        <input
+          matInput
+          type="number"
+          formControlName="yearbuilt"
+          placeholder="Enter year built"
+          required
+        />
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">
@@ -48,30 +68,15 @@
         <input
           matInput
           type="number"
-          placeholder="Enter living space"
           formControlName="livingSpace"
+          placeholder="Enter living space"
           required
         />
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Usable Area (m²)</mat-label>
-        <input
-          matInput
-          type="number"
-          placeholder="Enter usable area"
-          required
-        />
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Land Area (m²)</mat-label>
-        <input matInput type="number" placeholder="Enter land area" />
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Parking</mat-label>
-        <mat-select>
+        <mat-select formControlName="parking">
           <mat-option value="1 parking space">1 parking space</mat-option>
           <mat-option value="2 parking space">2 parking space</mat-option>
           <mat-option value="garage">garage</mat-option>
@@ -86,7 +91,13 @@
 
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Available From</mat-label>
-        <input matInput [min]="minDate" [matDatepicker]="picker" />
+        <input
+          matInput
+          formControlName="available"
+          [min]="minDate"
+          [matDatepicker]="picker"
+          required
+        />
         <mat-datepicker-toggle
           matIconSuffix
           [for]="picker"
@@ -98,32 +109,82 @@
 
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Owner Name</mat-label>
-        <input matInput placeholder="Enter owner name" required />
+        <input
+          matInput
+          formControlName="owner"
+          placeholder="Enter owner name"
+          required
+        />
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Owner Phone</mat-label>
-        <input matInput placeholder="Enter owner phone" required />
+        <input
+          matInput
+          formControlName="ownerPhone"
+          placeholder="Enter owner phone"
+          required
+        />
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Owner Email</mat-label>
-        <input matInput type="email" placeholder="Enter owner email" />
+        <input
+          matInput
+          type="email"
+          formControlName="ownerMail"
+          placeholder="Enter owner email"
+          required
+        />
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Owner Address</mat-label>
-        <textarea
+        <input
           matInput
+          formControlName="ownerAdress"
           placeholder="Enter owner address"
           required
-        ></textarea>
+        />
       </mat-form-field>
+
+      <div
+        class="upload-container"
+        (dragover)="$event.preventDefault()"
+        (dragleave)="$event.preventDefault()"
+        (drop)="onDrop($event)"
+      >
+        <div class="upload-zone">
+          <mat-icon>cloud_upload</mat-icon>
+          <p>Drag and drop files here or</p>
+          <input
+            type="file"
+            #fileInput
+            multiple
+            (change)="onFileSelected($event)"
+            style="display: none"
+          />
+          <button mat-raised-button color="primary" (click)="fileInput.click()">
+            Select Files
+          </button>
+        </div>
+
+        <!-- Preview area -->
+        <div class="preview-area" *ngIf="selectedFiles?.length">
+          <div class="file-preview" *ngFor="let file of selectedFiles">
+            <img [src]="file.preview" *ngIf="file.type.startsWith('image/')" />
+            <span>{{ file.name }}</span>
+            <button mat-icon-button (click)="removeFile(file)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
     </form>
   </div>
 
   <div mat-dialog-actions class="ml-16">
     <button mat-button mat-dialog-close>Cancel</button>
-    <button mat-button color="primary">Save</button>
+    <button mat-button color="primary" (click)="onSave()">Save</button>
   </div>
 </div>
