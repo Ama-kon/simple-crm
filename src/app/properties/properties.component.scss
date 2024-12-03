@@ -1,7 +1,7 @@
 .container {
     padding: 20px;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
     gap: 1.3rem;
 
     mat-card {
@@ -56,5 +56,25 @@
         position: fixed;
         right: 48px;
         bottom: 48px;
+    }
+
+    .property-image-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .nav-arrow {
+        position: absolute;
+        z-index: 1;
+        background: rgba(255, 255, 255, 0.7);
+
+        &.left {
+            left: 8px;
+        }
+
+        &.right {
+            right: 8px;
+        }
     }
 }
