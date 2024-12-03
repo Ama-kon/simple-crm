@@ -9,6 +9,8 @@ import { DialogAddPropertyComponent } from './dialog-add-property/dialog-add-pro
 import { MatDialog } from '@angular/material/dialog';
 import { Firestore, collection, collectionData } from '@angular/fire/firestore';
 import { Subscription } from 'rxjs';
+import { FormatDateService } from '../services/formatDate.service';
+import { Property } from '../../interfaces/property.interface';
 
 @Component({
   selector: 'app-properties',
@@ -23,15 +25,20 @@ import { Subscription } from 'rxjs';
     MatTooltipModule,
     DialogAddPropertyComponent,
   ],
+  providers: [FormatDateService],
   templateUrl: './properties.component.html',
   styleUrl: './properties.component.scss',
 })
 export class PropertiesComponent implements OnInit, OnDestroy {
   properties: any[] = [];
+  currentImageIndices: { [key: string]: number } = {};
   private firestore: Firestore = inject(Firestore);
   private propertySubscription: Subscription;
 
-  constructor(public dialog: MatDialog) {}
+  constructor(
+    public dialog: MatDialog,
+    private formatDateService: FormatDateService
+  ) {}
 
   ngOnInit(): void {
     this.loadProperties();
@@ -40,11 +47,19 @@ export class PropertiesComponent implements OnInit, OnDestroy {
 
   loadProperties() {
     const propertyCollection = collection(this.firestore, 'properties');
+
     this.propertySubscription = collectionData(propertyCollection, {
       idField: 'id',
-    }).subscribe((changes: any) => {
-      this.properties = changes;
+    }).subscribe((changes: any[]) => {
+      this.properties = changes.map((property: any) => ({
+        ...property,
+        imageUrls: property.imageUrls || [],
+      })) as Property[];
     });
+  }
+
+  formatDate(date: any): string {
+    return this.formatDateService.formatDate(date);
   }
 
   openDialog(): void {
@@ -53,6 +68,30 @@ export class PropertiesComponent implements OnInit, OnDestroy {
       width: '50%',
       maxWidth: '700px',
     });
+  }
+
+  nextImage(property: Property) {
+    if (!this.currentImageIndices[property.id]) {
+      this.currentImageIndices[property.id] = 0;
+    }
+
+    if (this.currentImageIndices[property.id] < property.imageUrls.length - 1) {
+      this.currentImageIndices[property.id]++;
+    } else {
+      this.currentImageIndices[property.id] = 0;
+    }
+  }
+
+  previousImage(property: Property) {
+    if (!this.currentImageIndices[property.id]) {
+      this.currentImageIndices[property.id] = 0;
+    }
+
+    if (this.currentImageIndices[property.id] > 0) {
+      this.currentImageIndices[property.id]--;
+    } else {
+      this.currentImageIndices[property.id] = property.imageUrls.length - 1;
+    }
   }
 
   ngOnDestroy() {
