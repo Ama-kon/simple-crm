@@ -7,11 +7,37 @@
       <mat-card-subtitle>{{ property.streetNumber }}</mat-card-subtitle>
       <mat-card-subtitle>{{ property.zipCity }}</mat-card-subtitle>
     </mat-card-header>
-    <img
-      mat-card-image
-      src="/assets/3-FH-Generationenhaus---SD-259-V372---_Generationenhaus.jpg"
-      alt="{{ property.type }}"
-    />
+
+    <div class="property-image-container">
+      <button
+        mat-icon-button
+        class="nav-arrow left"
+        (click)="previousImage(property)"
+        *ngIf="property.imageUrls?.length > 1"
+      >
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+
+      <img
+        mat-card-image
+        [src]="
+          property.imageUrls && property.imageUrls.length > 0
+            ? property.imageUrls[currentImageIndices[property.id] || 0]
+            : '/assets/no-image.png'
+        "
+        alt="{{ property.type }}"
+      />
+
+      <button
+        mat-icon-button
+        class="nav-arrow right"
+        (click)="nextImage(property)"
+        *ngIf="property.imageUrls?.length > 1"
+      >
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+
     <mat-card-content>
       <div class="property-details">
         <p class="price">{{ property.price }} €</p>
@@ -25,14 +51,14 @@
           <span>Land Area:</span> {{ property.landArea }} m²
         </p>
         <p><span>Parking:</span> {{ property.parking }}</p>
-        <p><span>Available From:</span> {{ property.available }}</p>
+        <p><span>Available From:</span> {{ formatDate(property.available) }}</p>
       </div>
 
       <div class="owner-details">
         <p><span>Owner:</span> {{ property.owner }}</p>
         <p><span>Phone:</span> {{ property.ownerPhone }}</p>
         <p>
-          <span>Email:</span>
+          <span>Email: </span>
           <a [href]="'mailto:' + property.ownerMail">{{
             property.ownerMail
           }}</a>
