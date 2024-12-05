@@ -7,10 +7,17 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DialogAddPropertyComponent } from './dialog-add-property/dialog-add-property.component';
 import { MatDialog } from '@angular/material/dialog';
-import { Firestore, collection, collectionData } from '@angular/fire/firestore';
+import {
+  Firestore,
+  collection,
+  collectionData,
+  doc,
+  updateDoc,
+} from '@angular/fire/firestore';
 import { Subscription } from 'rxjs';
 import { FormatDateService } from '../services/formatDate.service';
 import { Property } from '../../interfaces/property.interface';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-properties',
@@ -24,6 +31,7 @@ import { Property } from '../../interfaces/property.interface';
     MatButtonModule,
     MatTooltipModule,
     DialogAddPropertyComponent,
+    MatMenuModule,
   ],
   providers: [FormatDateService],
   templateUrl: './properties.component.html',
@@ -62,6 +70,13 @@ export class PropertiesComponent implements OnInit, OnDestroy {
     return this.formatDateService.formatDate(date);
   }
 
+  formatPrice(price: number): string {
+    return price.toLocaleString('de-DE', {
+      style: 'currency',
+      currency: 'EUR',
+    });
+  }
+
   openDialog(): void {
     this.dialog.open(DialogAddPropertyComponent, {
       data: {},
@@ -92,6 +107,13 @@ export class PropertiesComponent implements OnInit, OnDestroy {
     } else {
       this.currentImageIndices[property.id] = property.imageUrls.length - 1;
     }
+  }
+
+  async changeStatus(status: string, property: Property) {
+    const propertyRef = doc(this.firestore, 'properties', property.id);
+    await updateDoc(propertyRef, {
+      status: status,
+    });
   }
 
   ngOnDestroy() {
