@@ -2,6 +2,37 @@
 
 <div class="container">
   <mat-card *ngFor="let property of properties">
+    <div
+      class="property-status"
+      [ngClass]="{
+        'status-available': property.status === 'Available',
+        'status-reserved': property.status === 'Reserved',
+        'status-sold': property.status === 'Sold'
+      }"
+    >
+      {{ property.status }}
+      <button
+        mat-icon-button
+        aria-label="more options button"
+        matTooltip="Change property status"
+        class="options-button"
+        [matMenuTriggerFor]="menu"
+      >
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="changeStatus('Reserved', property)">
+          Mark as reserved
+        </button>
+        <button mat-menu-item (click)="changeStatus('Sold', property)">
+          Mark as sold
+        </button>
+        <button mat-menu-item (click)="changeStatus('Available', property)">
+          Mark as available
+        </button>
+      </mat-menu>
+    </div>
+
     <mat-card-header>
       <mat-card-title>{{ property.type }}</mat-card-title>
       <mat-card-subtitle>{{ property.streetNumber }}</mat-card-subtitle>
@@ -40,10 +71,10 @@
 
     <mat-card-content>
       <div class="property-details">
-        <p class="price">{{ property.price }} €</p>
+        <p class="price">{{ formatPrice(property.price) }}</p>
         <p>
           <span>Square meter price:</span>
-          {{ property.sqmPrice }} €
+          {{ formatPrice(property.sqmPrice) }}
         </p>
         <p><span>Year Built:</span> {{ property.yearbuilt }}</p>
         <p><span>Living Space:</span> {{ property.livingSpace }} m²</p>
