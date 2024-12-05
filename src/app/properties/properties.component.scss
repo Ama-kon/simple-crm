@@ -3,12 +3,40 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
     gap: 1.3rem;
+    font-family: system-ui;
+    border-radius: 5px;
 
     mat-card {
         display: grid;
-        grid-template-rows: auto 280px 1fr;
+        grid-template-rows: auto 100px 1fr;
         height: 100%;
-        border: 1px solid #e7e7e7;
+        border: 2px solid #e7e5e5;
+
+        .property-status {
+            height: 8vh;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            font-size: 20px;
+            font-weight: 300;
+            align-items: center;
+            padding-left: 16px;
+            background: #ffe4b4;
+            border-bottom: 2px solid white;
+            color: #7f7575;
+        }
+
+        .status-available {
+            background: #c1e3c1;
+        }
+
+        .status-reserved {
+            background: #ffe4b4;
+        }
+
+        .status-sold {
+            background: #ffa7a7;
+        }
 
         img {
             width: 100%;
@@ -17,12 +45,21 @@
             margin: 15px 0;
         }
 
+        .mat-mdc-card-header {
+            border-top: 0.5px solid #ffffff;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            margin-top: -8px;
+            background: white;
+        }
+
         mat-card-content {
             display: grid;
             grid-template-rows: 1fr auto;
 
             span {
                 font-weight: 500;
+                font-size: 16px;
             }
 
             .price {
@@ -48,7 +85,8 @@
         }
 
         &:hover {
-            border: 1px solid #acaaaa;
+            border: 2px solid white;
+            border-radius: 5px;
         }
     }
 
