@@ -19,6 +19,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { addDoc, collection, Firestore } from '@angular/fire/firestore';
 import { MatIconModule } from '@angular/material/icon';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @Component({
   selector: 'app-dialog-add-property',
@@ -34,6 +35,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatNativeDateModule,
     MatButtonModule,
     MatIconModule,
+    MatProgressBarModule,
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './dialog-add-property.component.html',
@@ -43,6 +45,7 @@ export class DialogAddPropertyComponent {
   propertyForm: FormGroup;
   minDate: Date = new Date();
   selectedFiles: any[] = [];
+  isLoading: boolean = false;
 
   constructor(
     public dialog: MatDialogRef<DialogAddPropertyComponent>,
@@ -122,6 +125,7 @@ export class DialogAddPropertyComponent {
 
   async onSave() {
     if (this.validateForm()) {
+      this.isLoading = true;
       try {
         const filesToUpload = this.selectedFiles.map((fileObj) => fileObj.file);
         if (filesToUpload.length > 0) {
@@ -138,7 +142,6 @@ export class DialogAddPropertyComponent {
         const propertyData = {
           ...this.propertyForm.getRawValue(),
           available: availableTimestamp,
-          createdAt: new Date(),
         };
 
         await addDoc(propertiesRef, propertyData);
@@ -147,6 +150,7 @@ export class DialogAddPropertyComponent {
         console.error('Error saving property:', error);
       }
     }
+    this.isLoading = false;
   }
 
   private validateForm(): boolean {
