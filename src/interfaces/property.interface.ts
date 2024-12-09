@@ -15,4 +15,5 @@ export interface Property {
   ownerMail: string;
   ownerAdress: string;
   imageUrls: string[];
+  status: string;
 }
