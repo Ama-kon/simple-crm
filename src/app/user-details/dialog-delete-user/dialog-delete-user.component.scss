@@ -1,0 +1,12 @@
+.dialog-container {
+    width: fit-content;
+    height: fit-content;
+    margin: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .mdc-dialog__actions {
+        gap: 24px;
+    }
+}
