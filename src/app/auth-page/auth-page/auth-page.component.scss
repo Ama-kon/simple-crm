@@ -1,0 +1,81 @@
+@import "../../../styles.scss";
+
+.header-container {
+    height: 8vh;
+    background: #f9f9f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 40px;
+    border-bottom: 1px solid #e6e6e6b0;
+    img {
+        width: 72px;
+        height: 64px;
+    }
+}
+
+.action-container {
+    gap: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.guest-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    content: center;
+    height: fit-content;
+    justify-content: center;
+    width: 100%;
+    margin-top: -40px;
+    font-size: 20px;
+    font-weight: 400;
+    button {
+        width: fit-content;
+        font-size: 20px;
+        font-weight: 500;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        &:hover {
+            border-bottom: 2px solid $primary-font-color;
+            color: $primary-font-color;
+        }
+    }
+    span {
+        color: rgb(105, 105, 105);
+    }
+}
+
+.footer-container {
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    width: 100%;
+    height: 8vh;
+    justify-content: center;
+    gap: 24px;
+    a {
+        font-size: 18px;
+        color: #9b9b9b;
+        text-decoration: none;
+        &:hover {
+            color: $primary-font-color;
+        }
+    }
+}
+
+.logo-animation {
+    animation: rotateOnce 1s ease-in-out;
+}
+
+@keyframes rotateOnce {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
