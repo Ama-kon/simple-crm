@@ -40,7 +40,7 @@ export class DialogAddUserComponent {
   async saveUser() {
     this.loading = true;
     this.user.birthDate = this.birthDate.getTime();
-    const userCollection = collection(this.firestore, 'users');
+    const userCollection = collection(this.firestore, 'standardData');
     const userToJson = Object.assign({}, this.user);
     await addDoc(userCollection, userToJson);
     this.clearForm();
