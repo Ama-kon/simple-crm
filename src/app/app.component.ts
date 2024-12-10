@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { StandardDataComponent } from './user-management/standard-data/standard-data.component';
-
+import { AuthPageComponent } from './auth-page/auth-page/auth-page.component';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -17,10 +17,12 @@ import { StandardDataComponent } from './user-management/standard-data/standard-
     MatSidenavModule,
     MatIconModule,
     StandardDataComponent,
+    AuthPageComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
   title = 'simple-crm';
+  constructor() {}
 }
