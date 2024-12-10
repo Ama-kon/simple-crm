@@ -23,6 +23,7 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { FollowUp } from '../../interfaces/followUp.interface';
 import { DialogEditFollowUpComponent } from '../dialog-edit-follow-up/dialog-edit-follow-up.component';
 import { DialogAddFollowUpComponent } from '../dialog-add-follow-up/dialog-add-follow-up.component';
+import { DialogDeleteUserComponent } from './dialog-delete-user/dialog-delete-user.component';
 
 @Component({
   selector: 'app-user-details',
@@ -37,6 +38,7 @@ import { DialogAddFollowUpComponent } from '../dialog-add-follow-up/dialog-add-f
     DialogEditAddressComponent,
     DialogEditNameComponent,
     DialogEditFollowUpComponent,
+    DialogDeleteUserComponent,
     MatTooltip,
   ],
   providers: [FormatDateService],
@@ -174,6 +176,12 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(() => {
       this.getFollowUps(this.currentUserId);
+    });
+  }
+
+  deleteUser() {
+    const dialogRef = this.dialog.open(DialogDeleteUserComponent, {
+      data: { userId: this.currentUserId },
     });
   }
 
