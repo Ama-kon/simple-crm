@@ -1,0 +1,38 @@
+<mat-card ngSkipHydration class="card">
+  <mat-card-title class="mb-16">Log in</mat-card-title>
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <p>
+        <mat-form-field appearance="outline">
+          <mat-label>E-Mail</mat-label>
+          <input
+            type="email"
+            matInput
+            placeholder="E-Mail"
+            formControlName="email"
+          />
+        </mat-form-field>
+      </p>
+
+      <p>
+        <mat-form-field appearance="outline">
+          <mat-label>Password</mat-label>
+          <input
+            type="password"
+            matInput
+            placeholder="Password"
+            formControlName="password"
+          />
+        </mat-form-field>
+      </p>
+
+      <p *ngIf="error" class="error">
+        {{ error }}
+      </p>
+
+      <div class="button-container">
+        <button type="submit" mat-raised-button color="primary">Log in</button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
