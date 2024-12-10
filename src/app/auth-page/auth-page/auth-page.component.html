@@ -1,0 +1,30 @@
+<div id="login-container" [class.d-none]="showSignUp">
+  <div class="header-container">
+    <img class="logo-animation" src="/assets/img/logo.png" alt="logo" />
+    <div class="action-container" (click)="toggleLoginSignUp()">
+      Not a member?
+      <button mat-raised-button color="primary">Sign up here!</button>
+    </div>
+  </div>
+  <app-log-in ngSkipHydration></app-log-in>
+  <div class="guest-container">
+    <span>Don’t have an account?</span>
+    <button>Log in as a guest!</button>
+  </div>
+</div>
+
+<div id="signup-container" [class.d-none]="!showSignUp">
+  <div class="header-container">
+    <img class="logo-animation" src="/assets/img/logo.png" alt="logo" />
+    <div class="action-container" (click)="toggleLoginSignUp()">
+      Already a member?
+      <button mat-raised-button color="primary">Log In here!</button>
+    </div>
+  </div>
+  <app-sign-in ngSkipHydration></app-sign-in>
+</div>
+
+<footer class="footer-container">
+  <a href="#">Privacy Policy</a>
+  <a href="#">Legal Notice</a>
+</footer>
