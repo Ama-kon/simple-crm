@@ -1,0 +1,72 @@
+<mat-card ngSkipHydration class="card">
+  <mat-card-title class="mb-16">Sign Up</mat-card-title>
+  <mat-card-content>
+    <div class="left"></div>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <p>
+        <mat-form-field appearance="outline">
+          <input
+            type="text"
+            matInput
+            placeholder="First name"
+            formControlName="firstName"
+          />
+        </mat-form-field>
+      </p>
+
+      <p>
+        <mat-form-field appearance="outline">
+          <input
+            type="text"
+            matInput
+            placeholder="Last name"
+            formControlName="lastName"
+          />
+        </mat-form-field>
+      </p>
+
+      <p>
+        <mat-form-field appearance="outline">
+          <input
+            type="email"
+            matInput
+            placeholder="E-Mail"
+            formControlName="email"
+          />
+        </mat-form-field>
+      </p>
+
+      <p>
+        <mat-form-field appearance="outline">
+          <input
+            type="password"
+            matInput
+            placeholder="Password"
+            formControlName="password"
+          />
+        </mat-form-field>
+      </p>
+
+      <p>
+        <mat-form-field appearance="outline">
+          <input
+            type="password"
+            matInput
+            placeholder="Repeat Password"
+            formControlName="confirmPassword"
+          />
+        </mat-form-field>
+      </p>
+
+      <p *ngIf="error" class="error">
+        {{ error }}
+      </p>
+
+      <div class="button">
+        <button mat-raised-button color="primary" type="submit">
+          Create account
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
