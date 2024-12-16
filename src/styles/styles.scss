@@ -2,7 +2,7 @@ $primary-font-color: #8c7cd1;
 
 @import "primeng/resources/themes/lara-light-blue/theme.css";
 @import "primeng/resources/primeng.css";
-@import "../../src/styles/_typography.scss";
+@import "./../styles/typography";
 
 html,
 body {
