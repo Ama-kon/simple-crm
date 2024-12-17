@@ -92,9 +92,7 @@
 }
 
 .urgent {
-    border-left: 4px solid #ff00004a;
-    border-right: 4px solid #ff00004a;
-    background-color: rgb(248 156 156 / 10%);
+    border: 3px solid red;
 }
 
 @keyframes rotate-and-pulse {
