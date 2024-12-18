@@ -1,4 +1,4 @@
-<div class="full-screen">
+<div class="full-screen" [ngClass]="{ 'd-none': isGuest }">
   <app-auth-page></app-auth-page>
 </div>
 
@@ -8,17 +8,33 @@
       <img src="assets/img/logo.png" alt="" />
     </div>
     <ul>
-      <li [routerLink]="['']" routerLinkActive="active-link">
+      <li
+        [routerLink]="['']"
+        routerLinkActive="active-link"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
         <mat-icon>grid_view</mat-icon>
         Dashboard
       </li>
-      <li [routerLink]="['user']" routerLinkActive="active-link">
+      <li
+        [routerLink]="['user']"
+        routerLinkActive="active-link"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
         <mat-icon>person_outlined</mat-icon> Clients
       </li>
-      <li [routerLink]="['followUp']" routerLinkActive="active-link">
+      <li
+        [routerLink]="['followUp']"
+        routerLinkActive="active-link"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
         <mat-icon>pending_actions</mat-icon> Follow up
       </li>
-      <li [routerLink]="['properties']" routerLinkActive="active-link">
+      <li
+        [routerLink]="['properties']"
+        routerLinkActive="active-link"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
         <mat-icon>real_estate_agent</mat-icon> Properties
       </li>
     </ul>
@@ -26,12 +42,15 @@
   <div class="sidenav-content">
     <mat-toolbar color="primary">
       <mat-toolbar-row>
-        <mat-icon
-          class="menu-icon"
-          fontIcon="menu"
-          (click)="drawer.toggle()"
-        ></mat-icon>
-        <h1>Simple CRM</h1>
+        <div class="header-container">
+          <mat-icon
+            class="menu-icon"
+            fontIcon="menu"
+            (click)="drawer.toggle()"
+          ></mat-icon>
+          <h1>DomusSync</h1>
+        </div>
+        <button (click)="logOut()">Logout</button>
       </mat-toolbar-row>
     </mat-toolbar>
   </div>
