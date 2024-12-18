@@ -7,6 +7,7 @@ import {
   MatDialogModule,
   MatDialogRef,
 } from '@angular/material/dialog';
+import { AuthenticationService } from '../../services/authentication.service';
 
 @Component({
   selector: 'app-dialog-delete-user',
@@ -18,6 +19,7 @@ import {
 export class DialogDeleteUserComponent {
   loading = false;
   constructor(
+    private authenticationService: AuthenticationService,
     private dialogRef: MatDialogRef<DialogDeleteUserComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { userId: string },
     private router: Router
@@ -30,12 +32,17 @@ export class DialogDeleteUserComponent {
 
   deleteUser() {
     this.loading = true;
-    const userCollection = collection(this.firestore, 'standardData');
-    const currentUserRef = doc(userCollection, this.data.userId);
-    deleteDoc(currentUserRef);
-    console.log('User deleted successfully');
-    this.closeDialog();
-    this.router.navigate(['/user']);
-    this.loading = false;
+
+    this.authenticationService.isGuest$.subscribe((isGuest) => {
+      const collectionPath = isGuest ? 'guest/users' : 'standardData';
+      const userCollection = collection(this.firestore, collectionPath);
+      const currentUserRef = doc(userCollection, this.data.userId);
+
+      deleteDoc(currentUserRef);
+      console.log('User deleted successfully');
+      this.closeDialog();
+      this.router.navigate(['/user']);
+      this.loading = false;
+    });
   }
 }
