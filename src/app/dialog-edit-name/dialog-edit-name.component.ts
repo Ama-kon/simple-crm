@@ -1,4 +1,11 @@
-import { Component, Inject, Output, inject, EventEmitter } from '@angular/core';
+import {
+  Component,
+  Inject,
+  Output,
+  inject,
+  EventEmitter,
+  OnDestroy,
+} from '@angular/core';
 import {
   MatDialogRef,
   MatDialogModule,
@@ -15,6 +22,8 @@ import { FormsModule } from '@angular/forms';
 import { Firestore, doc, updateDoc } from '@angular/fire/firestore';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { CommonModule } from '@angular/common';
+import { AuthenticationService } from '../services/authentication.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-dialog-edit-name',
@@ -34,23 +43,33 @@ import { CommonModule } from '@angular/common';
   templateUrl: './dialog-edit-name.component.html',
   styleUrl: './dialog-edit-name.component.scss',
 })
-export class DialogEditNameComponent {
+export class DialogEditNameComponent implements OnDestroy {
   user: User;
   loading = false;
   private firestore: Firestore = inject(Firestore);
+  private isGuest: boolean = false;
+  private subscription: Subscription;
   @Output() userUpdated = new EventEmitter<void>();
+
   constructor(
     public dialog: MatDialogRef<DialogEditNameComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { user: User; userId: string }
+    @Inject(MAT_DIALOG_DATA) public data: { user: User; userId: string },
+    private authService: AuthenticationService
   ) {
     this.user = this.data.user;
+    this.subscription = this.authService.isGuest$.subscribe(
+      (isGuest) => (this.isGuest = isGuest)
+    );
   }
-
-  ngOnInit(): void {}
 
   saveEdit() {
     this.loading = true;
-    const userDocRef = doc(this.firestore, 'users', this.data.userId);
+    const collectionPath = this.isGuest
+      ? `guest/guestDoc/standardData`
+      : 'standardData';
+
+    const userDocRef = doc(this.firestore, collectionPath, this.data.userId);
+
     updateDoc(userDocRef, { ...this.user }).then(() => {
       this.loading = false;
       this.userUpdated.emit();
@@ -60,5 +79,9 @@ export class DialogEditNameComponent {
 
   closeDialog() {
     this.dialog.close();
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }
