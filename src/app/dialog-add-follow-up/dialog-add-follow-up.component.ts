@@ -3,6 +3,7 @@ import {
   EventEmitter,
   Inject,
   inject,
+  OnDestroy,
   OnInit,
   Output,
 } from '@angular/core';
@@ -31,6 +32,8 @@ import { FollowUp } from '../../interfaces/followUp.interface';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { FormatDateService } from '../services/formatDate.service';
 import { MatSelectModule } from '@angular/material/select';
+import { AuthenticationService } from '../services/authentication.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-dialog-add-follow-up',
@@ -51,21 +54,26 @@ import { MatSelectModule } from '@angular/material/select';
   templateUrl: './dialog-add-follow-up.component.html',
   styleUrl: './dialog-add-follow-up.component.scss',
 })
-export class DialogAddFollowUpComponent implements OnInit {
+export class DialogAddFollowUpComponent implements OnInit, OnDestroy {
   user: User;
   loading = false;
   minDate: Date = new Date();
+  private isGuest: boolean = false;
+  private subscription: Subscription;
+
   categories = [
     { value: 'Follow up' },
     { value: 'Lead Nurturing' },
     { value: 'After Sales' },
   ];
+
   actions = [
     { value: 'Call' },
     { value: 'Email' },
     { value: 'Meeting' },
     { value: 'Other' },
   ];
+
   newFollowUp: FollowUp = {
     id: '',
     category: '',
@@ -79,26 +87,31 @@ export class DialogAddFollowUpComponent implements OnInit {
   private firestore: Firestore = inject(Firestore);
   private formatDateService = inject(FormatDateService);
   @Output() userUpdated = new EventEmitter<void>();
+
   constructor(
     public dialog: MatDialogRef<DialogAddFollowUpComponent>,
     @Inject(MAT_DIALOG_DATA)
-    public data: { user: User; userId: string; followUps: FollowUp[] }
+    public data: { user: User; userId: string; followUps: FollowUp[] },
+    private authService: AuthenticationService
   ) {
     this.user = this.data.user;
     this.user.followUps = this.data.followUps;
+    this.subscription = this.authService.isGuest$.subscribe(
+      (isGuest) => (this.isGuest = isGuest)
+    );
   }
 
   ngOnInit(): void {
     this.newFollowUp.createdAt = new Date().getTime();
   }
 
-  formatDate(date: any): string {
-    return this.formatDateService.formatDate(date);
-  }
-
   saveNew() {
     this.loading = true;
-    const userDocRef = doc(this.firestore, 'standardData', this.data.userId);
+    const collectionPath = this.isGuest
+      ? `guest/guestDoc/standardData`
+      : 'standardData';
+
+    const userDocRef = doc(this.firestore, collectionPath, this.data.userId);
     const followUpsCollectionRef = collection(userDocRef, 'Follow-ups');
     this.newFollowUp.deadline = new Date(this.newFollowUp.deadline).getTime();
 
@@ -113,7 +126,15 @@ export class DialogAddFollowUpComponent implements OnInit {
     });
   }
 
+  formatDate(date: any): string {
+    return this.formatDateService.formatDate(date);
+  }
+
   closeDialog() {
     this.dialog.close();
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }
