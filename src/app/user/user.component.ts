@@ -15,6 +15,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { UserSearchStateService } from '../services/userSearchState.service';
+import { AuthenticationService } from '../services/authentication.service';
 @Component({
   selector: 'app-user',
   standalone: true,
@@ -40,18 +41,33 @@ export class UserComponent implements OnInit, OnDestroy {
   filteredUsers: User[] = [];
   searchTerm: string = '';
   aToZ: boolean = true;
+  private isGuest: boolean = false;
   private userSubscription: Subscription;
+  private authSubscription: Subscription;
   private firestore: Firestore = inject(Firestore);
 
   constructor(
     public dialog: MatDialog,
     private formatDateService: FormatDateService,
-    private UserSearchStateService: UserSearchStateService
-  ) {}
+    private UserSearchStateService: UserSearchStateService,
+    private authService: AuthenticationService
+  ) {
+    this.authSubscription = this.authService.isGuest$.subscribe((isGuest) => {
+      this.isGuest = isGuest;
+      this.loadUsers(); // Reload users when auth state changes
+    });
+  }
 
   ngOnInit(): void {
-    const userCollection = collection(this.firestore, 'standardData');
-    this.userSubscription = collectionData(userCollection, {
+    this.loadUsers();
+  }
+
+  private loadUsers(): void {
+    const collectionPath = this.isGuest
+      ? collection(this.firestore, 'guest', 'guestDoc', 'standardData')
+      : collection(this.firestore, 'standardData');
+
+    this.userSubscription = collectionData(collectionPath, {
       idField: 'id',
     }).subscribe((changes: any) => {
       this.allUsers$ = changes;
@@ -162,6 +178,9 @@ export class UserComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.userSubscription) {
       this.userSubscription.unsubscribe();
+    }
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
     }
   }
 }
