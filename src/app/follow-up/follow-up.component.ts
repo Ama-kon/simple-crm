@@ -17,6 +17,7 @@ import { from, Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogEditFollowUpComponent } from '../dialog-edit-follow-up/dialog-edit-follow-up.component';
 import { User } from '../../models/user.class';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
   selector: 'app-follow-up',
@@ -38,6 +39,8 @@ export class FollowUpComponent implements OnInit, OnDestroy {
   private formatDateService = inject(FormatDateService);
   private followUpSubscription: Subscription;
   private userSubscription: Subscription;
+  private authSubscription: Subscription;
+  private isGuest: boolean = false;
 
   allFollowUps: any[] = [];
   followUpCategory: any[] = [];
@@ -47,26 +50,30 @@ export class FollowUpComponent implements OnInit, OnDestroy {
   currentUserFollowUps: any[] = [];
   indexOfFollowUp: number;
 
-  constructor(public dialog: MatDialog) {}
+  constructor(
+    public dialog: MatDialog,
+    private authService: AuthenticationService
+  ) {
+    this.authSubscription = this.authService.isGuest$.subscribe((isGuest) => {
+      this.isGuest = isGuest;
+      if (this.allFollowUps.length > 0) {
+        this.emptyAllArrays();
+        this.getAllFollowUps();
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.getAllFollowUps();
   }
 
-  /**
-   * Retrieves and processes all follow-ups for all users from the Firestore database.
-   *
-   * This function:
-   * 1. Shows an overlay to indicate loading.
-   * 2. Creates a reference to the 'standardData' collection in Firestore.
-   * 3. Subscribes to the collection data and processes it asynchronously.
-   * 4. Stores the processed follow-ups in the component's allFollowUps array.
-   * 5. Categorizes the follow-ups.
-   * 6. Hides the loading overlay when done.
-   */
   async getAllFollowUps() {
     this.showHideOverlay();
-    const standardDataRef = collection(this.firestore, 'standardData');
+    const collectionPath = this.isGuest
+      ? 'guest/guestDoc/standardData'
+      : 'standardData';
+
+    const standardDataRef = collection(this.firestore, collectionPath);
 
     this.followUpSubscription = from(getDocs(standardDataRef)).subscribe(
       async (standardDataSnapshot) => {
@@ -203,15 +210,21 @@ export class FollowUpComponent implements OnInit, OnDestroy {
   }
 
   async editDialog(task: any) {
+    console.log(task);
     this.showHideOverlay();
     await this.getCurrentUser(task.userId);
+
     await this.getIndexOfFollowUp(task.userId, task.followUpId);
     this.openDialog(task);
     this.showHideOverlay();
   }
 
   async getIndexOfFollowUp(userId: string, followUpId: string) {
-    const userCollection = collection(this.firestore, 'standardData');
+    const collectionPath = this.isGuest
+      ? 'guest/guestDoc/standardData'
+      : 'standardData';
+
+    const userCollection = collection(this.firestore, collectionPath);
     const userDocRef = doc(userCollection, userId);
     const followUpsCollectionRef = collection(userDocRef, 'Follow-ups');
 
@@ -226,6 +239,10 @@ export class FollowUpComponent implements OnInit, OnDestroy {
   }
 
   openDialog(task: any) {
+    console.log('Task:', task);
+    console.log('Current User Follow-ups:', this.currentUserFollowUps);
+    console.log('Index:', this.indexOfFollowUp);
+
     const userCopy = { ...this.currentUser };
     const dialogRef = this.dialog.open(DialogEditFollowUpComponent, {
       data: {
@@ -243,9 +260,14 @@ export class FollowUpComponent implements OnInit, OnDestroy {
     });
   }
 
-  getCurrentUser(id: string) {
-    const userCollection = collection(this.firestore, 'standardData');
+  async getCurrentUser(id: string) {
+    const collectionPath = this.isGuest
+      ? 'guest/guestDoc/standardData'
+      : 'standardData';
+
+    const userCollection = collection(this.firestore, collectionPath);
     const currentUserRef = doc(userCollection, id);
+
     this.userSubscription = from(getDoc(currentUserRef)).subscribe(
       (document) => {
         if (document.exists()) {
@@ -305,6 +327,9 @@ export class FollowUpComponent implements OnInit, OnDestroy {
     }
     if (this.userSubscription) {
       this.userSubscription.unsubscribe();
+    }
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
     }
   }
 }
