@@ -56,22 +56,36 @@ export class DataHandlingService {
   }
 
   /**
-   * Deletes the guest user data, including the guest document and all subcollections (properties and standardData).
-   * This method first deletes all documents in the 'guest/guestDoc/properties' and 'guest/guestDoc/standardData' subcollections,
+   * Deletes the guest user data, including the guest document and all subcollections (properties,follow-ups and standardData).
+   * This method first deletes all documents in the 'guest/guestDoc/properties', 'guest/guestDoc/standardData' and 'guest/guestDoc/standardData/Follow-ups' subcollections,
    * and then deletes the 'guestDoc' document in the 'guest' collection.
    */
   async deleteGuestData() {
-    const guestProperties = await getDocs(
-      collection(this.firestore, 'guest/guestDoc/properties')
-    );
     const guestStandardData = await getDocs(
       collection(this.firestore, 'guest/guestDoc/standardData')
     );
 
-    await Promise.all([
-      ...guestProperties.docs.map((doc) => deleteDoc(doc.ref)),
-      ...guestStandardData.docs.map((doc) => deleteDoc(doc.ref)),
-    ]);
+    for (const doc of guestStandardData.docs) {
+      const followUpsCollection = collection(
+        this.firestore,
+        `guest/guestDoc/standardData/${doc.id}/Follow-ups`
+      );
+
+      const followUps = await getDocs(followUpsCollection);
+      if (!followUps.empty) {
+        for (const followUpDoc of followUps.docs) {
+          await deleteDoc(followUpDoc.ref);
+        }
+      }
+      await deleteDoc(doc.ref);
+    }
+
+    const guestProperties = await getDocs(
+      collection(this.firestore, 'guest/guestDoc/properties')
+    );
+    for (const doc of guestProperties.docs) {
+      await deleteDoc(doc.ref);
+    }
 
     await deleteDoc(doc(this.firestore, 'guest', 'guestDoc'));
   }
