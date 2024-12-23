@@ -21,6 +21,5 @@ export class AuthenticationService {
   logOut() {
     this.setGuestMode(false);
     this.dataHandlingService.deleteGuestData();
-    console.log('abgemeldet');
   }
 }
