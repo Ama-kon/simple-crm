@@ -1,4 +1,11 @@
-import { Component, Inject, inject, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  Inject,
+  inject,
+  Output,
+  EventEmitter,
+  OnDestroy,
+} from '@angular/core';
 import {
   MatDialogRef,
   MatDialogModule,
@@ -18,6 +25,8 @@ import { CommonModule } from '@angular/common';
 import { FollowUp } from '../../interfaces/followUp.interface';
 import { FormatDateService } from '../services/formatDate.service';
 import { MatSelectModule } from '@angular/material/select';
+import { Subscription } from 'rxjs';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
   selector: 'app-dialog-edit-follow-up',
@@ -38,14 +47,15 @@ import { MatSelectModule } from '@angular/material/select';
   templateUrl: './dialog-edit-follow-up.component.html',
   styleUrl: './dialog-edit-follow-up.component.scss',
 })
-export class DialogEditFollowUpComponent {
+export class DialogEditFollowUpComponent implements OnDestroy {
   user: User;
   userId: string;
   followUpId: string;
-  index: number;
   currentFollowUp: FollowUp;
   loading = false;
   minDate: Date = new Date();
+  private isGuest: boolean = false;
+  private subscription: Subscription;
 
   actions = [
     { value: 'Call' },
@@ -65,41 +75,65 @@ export class DialogEditFollowUpComponent {
       user: User;
       userId: string;
       followUpId: string;
-      index: number;
       followUps: FollowUp[];
-    }
+    },
+    private authService: AuthenticationService
   ) {
     this.user = data.user;
     this.userId = data.userId;
     this.followUpId = data.followUpId;
-    this.index = data.index;
-    this.currentFollowUp = this.data.followUps[this.data.index];
+
+    const foundFollowUp = data.followUps.find(
+      (followUp) => followUp.id === this.followUpId
+    );
+
+    if (foundFollowUp) {
+      this.currentFollowUp = {
+        id: foundFollowUp.id,
+        action: foundFollowUp.action,
+        category: foundFollowUp.category,
+        createdAt: foundFollowUp.createdAt,
+        deadline: foundFollowUp.deadline,
+        description: foundFollowUp.description,
+        status: foundFollowUp.status,
+      };
+    }
+
+    this.subscription = this.authService.isGuest$.subscribe(
+      (isGuest) => (this.isGuest = isGuest)
+    );
+  }
+
+  saveEdit() {
+    this.loading = true;
+    const collectionPath = this.isGuest
+      ? `guest/guestDoc/standardData`
+      : 'standardData';
+
+    const userDocRef = doc(this.firestore, collectionPath, this.userId);
+    const followUpDocRef = doc(userDocRef, '/Follow-ups/', this.followUpId);
+
+    const updatedFollowUp = {
+      ...this.currentFollowUp,
+      deadline: new Date(this.currentFollowUp.deadline).getTime(),
+    };
+
+    setDoc(followUpDocRef, updatedFollowUp).then(() => {
+      this.loading = false;
+      this.userUpdated.emit();
+      this.closeDialog();
+    });
   }
 
   formatDate(date: any): string {
     return this.formatDateService.formatDate(date);
   }
 
-  saveEdit() {
-    const userDocRef = doc(this.firestore, 'standardData', this.data.userId);
-    const followUpDocRef = doc(
-      userDocRef,
-      'Follow-ups',
-      this.currentFollowUp.id
-    );
-    const updatedFollowUp = {
-      ...this.currentFollowUp,
-      deadline: new Date(this.currentFollowUp.deadline).getTime(),
-    };
-    setDoc(followUpDocRef, updatedFollowUp).then(() => {
-      this.loading = false;
-      this.userUpdated.emit();
-      this.closeDialog();
-      this.loading = false;
-    });
-  }
-
   closeDialog() {
     this.dialog.close();
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }
