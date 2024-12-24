@@ -80,7 +80,9 @@
           <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu2="matMenu">
-          <button mat-menu-item (click)="editFollowUpCard(index)">Edit</button>
+          <button mat-menu-item (click)="editFollowUpCard(followUp)">
+            Edit
+          </button>
         </mat-menu>
         <mat-card-header>
           <mat-card-title>{{ followUp.category }}</mat-card-title>
