@@ -34,7 +34,9 @@ export class DialogDeleteUserComponent {
     this.loading = true;
 
     this.authenticationService.isGuest$.subscribe((isGuest) => {
-      const collectionPath = isGuest ? 'guest/users' : 'standardData';
+      const collectionPath = isGuest
+        ? `guest/guestDoc/standardData`
+        : 'standardData';
       const userCollection = collection(this.firestore, collectionPath);
       const currentUserRef = doc(userCollection, this.data.userId);
 
