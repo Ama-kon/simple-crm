@@ -14,10 +14,11 @@ import {
   doc,
   updateDoc,
 } from '@angular/fire/firestore';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription, switchMap } from 'rxjs';
 import { FormatDateService } from '../services/formatDate.service';
 import { Property } from '../../interfaces/property.interface';
 import { MatMenuModule } from '@angular/material/menu';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
   selector: 'app-properties',
@@ -42,6 +43,7 @@ export class PropertiesComponent implements OnInit, OnDestroy {
   currentImageIndices: { [key: string]: number } = {};
   private firestore: Firestore = inject(Firestore);
   private propertySubscription: Subscription;
+  private authService: AuthenticationService = inject(AuthenticationService);
 
   constructor(
     public dialog: MatDialog,
@@ -54,16 +56,20 @@ export class PropertiesComponent implements OnInit, OnDestroy {
   }
 
   loadProperties() {
-    const propertyCollection = collection(this.firestore, 'properties');
-
-    this.propertySubscription = collectionData(propertyCollection, {
-      idField: 'id',
-    }).subscribe((changes: any[]) => {
-      this.properties = changes.map((property: any) => ({
-        ...property,
-        imageUrls: property.imageUrls || [],
-      })) as Property[];
-    });
+    this.authService.isGuest$
+      .pipe(
+        switchMap((isGuest) => {
+          const path = isGuest ? 'guest/guestDoc/properties' : 'properties';
+          const propertyCollection = collection(this.firestore, path);
+          return collectionData(propertyCollection, { idField: 'id' });
+        })
+      )
+      .subscribe((changes: any[]) => {
+        this.properties = changes.map((property: any) => ({
+          ...property,
+          imageUrls: property.imageUrls || [],
+        })) as Property[];
+      });
   }
 
   formatDate(date: any): string {
@@ -110,7 +116,10 @@ export class PropertiesComponent implements OnInit, OnDestroy {
   }
 
   async changeStatus(status: string, property: Property) {
-    const propertyRef = doc(this.firestore, 'properties', property.id);
+    const isGuest = await firstValueFrom(this.authService.isGuest$);
+    const path = isGuest ? `guest/guestDoc/properties` : 'properties';
+    const propertyRef = doc(this.firestore, path, property.id);
+
     await updateDoc(propertyRef, {
       status: status,
     });
