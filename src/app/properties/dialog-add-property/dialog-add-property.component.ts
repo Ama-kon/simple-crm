@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -20,6 +20,8 @@ import { CommonModule } from '@angular/common';
 import { addDoc, collection, Firestore } from '@angular/fire/firestore';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { AuthenticationService } from '../../services/authentication.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-dialog-add-property',
@@ -42,6 +44,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
   styleUrl: './dialog-add-property.component.scss',
 })
 export class DialogAddPropertyComponent {
+  private authService: AuthenticationService = inject(AuthenticationService);
   propertyForm: FormGroup;
   minDate: Date = new Date();
   selectedFiles: any[] = [];
@@ -68,6 +71,7 @@ export class DialogAddPropertyComponent {
       yearbuilt: ['', Validators.required],
       zipCity: ['', Validators.required],
       imageUrls: [[]],
+      status: ['Available'],
     });
 
     this.propertyForm.get('price')?.valueChanges.subscribe(() => {
@@ -127,6 +131,11 @@ export class DialogAddPropertyComponent {
     if (this.validateForm()) {
       this.isLoading = true;
       try {
+        const isGuest = await firstValueFrom(this.authService.isGuest$);
+        const collectionPath = isGuest
+          ? 'guest/guestDoc/properties'
+          : 'properties';
+
         const filesToUpload = this.selectedFiles.map((fileObj) => fileObj.file);
         if (filesToUpload.length > 0) {
           const urls = await this.imageUploadService.uploadPropertyImages(
@@ -138,7 +147,7 @@ export class DialogAddPropertyComponent {
         const availableDate = this.propertyForm.get('available')?.value;
         const availableTimestamp = new Date(availableDate).getTime();
 
-        const propertiesRef = collection(this.firestore, 'properties');
+        const propertiesRef = collection(this.firestore, collectionPath);
         const propertyData = {
           ...this.propertyForm.getRawValue(),
           available: availableTimestamp,
@@ -149,8 +158,8 @@ export class DialogAddPropertyComponent {
       } catch (error) {
         console.error('Error saving property:', error);
       }
+      this.isLoading = false;
     }
-    this.isLoading = false;
   }
 
   private validateForm(): boolean {
