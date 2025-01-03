@@ -36,6 +36,17 @@
           <div class="task-card-created">
             Created: {{ formatDate(task.createdAt) }}
           </div>
+          <div class="status-checkbox">
+            <p>
+              Done:
+              <mat-checkbox
+                matTooltip="Mark as done"
+                matTooltipPosition="above"
+                (click)="$event.stopPropagation()"
+                [checked]="false"
+              ></mat-checkbox>
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -65,6 +76,17 @@
           </div>
           <div class="task-card-created">
             Created: {{ formatDate(task.createdAt) }}
+          </div>
+          <div class="status-checkbox">
+            <p>
+              Done:
+              <mat-checkbox
+                matTooltip="Mark as not done"
+                matTooltipPosition="above"
+                (click)="$event.stopPropagation()"
+                [checked]="true"
+              ></mat-checkbox>
+            </p>
           </div>
         </div>
       </div>
@@ -105,6 +127,17 @@
           <div class="task-card-created">
             Created: {{ formatDate(task.createdAt) }}
           </div>
+          <div class="status-checkbox">
+            <p>
+              Done:
+              <mat-checkbox
+                matTooltip="Mark as done"
+                matTooltipPosition="above"
+                (click)="$event.stopPropagation()"
+                [checked]="false"
+              ></mat-checkbox>
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -134,6 +167,17 @@
           </div>
           <div class="task-card-created">
             Created: {{ formatDate(task.createdAt) }}
+          </div>
+          <div class="status-checkbox">
+            <p>
+              Done:
+              <mat-checkbox
+                matTooltip="Mark as not done"
+                matTooltipPosition="above"
+                (click)="$event.stopPropagation()"
+                [checked]="true"
+              ></mat-checkbox>
+            </p>
           </div>
         </div>
       </div>
@@ -173,6 +217,17 @@
           <div class="task-card-created">
             Created: {{ formatDate(task.createdAt) }}
           </div>
+          <div class="status-checkbox">
+            <p>
+              Done:
+              <mat-checkbox
+                matTooltip="Mark as done"
+                matTooltipPosition="above"
+                (click)="$event.stopPropagation()"
+                [checked]="false"
+              ></mat-checkbox>
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -202,6 +257,17 @@
           </div>
           <div class="task-card-created">
             Created: {{ formatDate(task.createdAt) }}
+          </div>
+          <div class="status-checkbox">
+            <p>
+              Done:
+              <mat-checkbox
+                matTooltip="Mark as not done"
+                matTooltipPosition="above"
+                (click)="$event.stopPropagation()"
+                [checked]="true"
+              ></mat-checkbox>
+            </p>
           </div>
         </div>
       </div>
