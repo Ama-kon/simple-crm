@@ -18,6 +18,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogEditFollowUpComponent } from '../dialog-edit-follow-up/dialog-edit-follow-up.component';
 import { User } from '../../models/user.class';
 import { AuthenticationService } from '../services/authentication.service';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-follow-up',
@@ -29,6 +31,8 @@ import { AuthenticationService } from '../services/authentication.service';
     CommonModule,
     NgFor,
     DialogEditFollowUpComponent,
+    MatCheckboxModule,
+    MatTooltipModule,
   ],
   providers: [FormatDateService],
   templateUrl: './follow-up.component.html',
