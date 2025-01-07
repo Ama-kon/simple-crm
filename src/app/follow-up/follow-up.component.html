@@ -264,7 +264,7 @@
               <mat-checkbox
                 matTooltip="Mark as not done"
                 matTooltipPosition="above"
-                (click)="$event.stopPropagation()"
+                (click)="$event.stopPropagation(); markAsNotDone(task)"
                 [checked]="true"
               ></mat-checkbox>
             </p>

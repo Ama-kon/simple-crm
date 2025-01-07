@@ -20,6 +20,7 @@ import { User } from '../../models/user.class';
 import { AuthenticationService } from '../services/authentication.service';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { FollowUp } from '../../interfaces/followUp.interface';
 
 @Component({
   selector: 'app-follow-up',
@@ -323,6 +324,10 @@ export class FollowUpComponent implements OnInit, OnDestroy {
     const fiveDaysInMs = 5 * 24 * 60 * 60 * 1000;
     const timeDifference = taskDeadline - today;
     return timeDifference <= fiveDaysInMs && timeDifference > 0;
+  }
+
+  markAsNotDone(task: FollowUp[]) {
+    console.log(task);
   }
 
   ngOnDestroy() {
